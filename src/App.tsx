@@ -1,27 +1,68 @@
-import React, { useState, useEffect } from "react";
-import logo from "./logo.svg";
+import React, { createContext, useEffect } from "react";
+import { ReadyState, useSocketIO } from "react-use-websocket";
 import "./App.css";
-import {
-	MapContainer,
-	Marker,
-	Popup,
-	TileLayer,
-	ImageOverlay,
-} from "react-leaflet";
 import MapRenderer from "./MapRenderer";
-import { CRS, LatLngBounds } from "leaflet";
+import { io } from "socket.io-client";
+import type { RouteComponentProps } from "react-router";
+import { useRoom } from "./hooks/useRoom";
+import { LatLngExpression } from "leaflet";
 
 interface AppProps {}
 
-function App({}: AppProps) {
+const connectionStatus = {
+	[ReadyState.CONNECTING]: "Connecting",
+	[ReadyState.OPEN]: "Open",
+	[ReadyState.CLOSING]: "Closing",
+	[ReadyState.CLOSED]: "Closed",
+	[ReadyState.UNINSTANTIATED]: "Uninstantiated",
+};
+
+export const CurrentRoomCtx = createContext<{
+	color: string;
+	markers: { id: string; pos: LatLngExpression; color: string }[];
+	addMarker: (pos: LatLngExpression) => void;
+	removeMarker: (id: string) => void;
+}>({
+	color: "black",
+	markers: [],
+	addMarker: () => {},
+	removeMarker: (id: string) => {},
+});
+
+function App() {
+	const room = useRoom("jdr");
+
 	return (
-		<MapContainer center={[500, 500]} zoom={1} crs={CRS.Simple}>
-			<ImageOverlay
-				bounds={new LatLngBounds([0, 0], [1000, 1000])}
-				url="/map_collier.png"
-			/>
-		</MapContainer>
+		<div>
+			<CurrentRoomCtx.Provider value={room}>
+				<MapRenderer />
+			</CurrentRoomCtx.Provider>
+		</div>
 	);
+}
+
+function WebsocketHandler({ roomId }: { roomId: string }) {
+	// useEffect(() => {
+	// 	const socket = io("localhost:8082", {
+	// 		transports: ["websocket"],
+	// 	});
+
+	// 	socket.on("connect", () => {
+	// 		socket.emit("join", roomId);
+	// 	});
+
+	// 	socket.on("connect_error", (err) => {
+	// 		console.log("error", err);
+	// 	});
+
+	// 	socket.on("joined", (id) => {
+	// 		console.log("Joined room", id);
+	// 	});
+
+	// 	return () => {};
+	// }, []);
+
+	return null;
 }
 
 export default App;
