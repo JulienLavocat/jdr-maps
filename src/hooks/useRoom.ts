@@ -4,7 +4,7 @@ import { LatLngExpression } from "leaflet";
 import { useRecoilState } from "recoil";
 import { markerColors } from "../MapRenderer/mapState";
 
-const SOCKET_SERVER_URL = "localhost:8082";
+const SOCKET_SERVER_URL = "212.47.253.235:8082";
 
 export const useRoom = (roomId: string) => {
 	const [markers, setMarkers] = useState<
