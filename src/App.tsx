@@ -1,41 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import {
+	MapContainer,
+	Marker,
+	Popup,
+	TileLayer,
+	ImageOverlay,
+} from "react-leaflet";
+import MapRenderer from "./MapRenderer";
+import { CRS, LatLngBounds } from "leaflet";
 
 interface AppProps {}
 
 function App({}: AppProps) {
-  // Create the count state.
-  const [count, setCount] = useState(0);
-  // Create the counter (+1 every second).
-  useEffect(() => {
-    const timer = setTimeout(() => setCount(count + 1), 1000);
-    return () => clearTimeout(timer);
-  }, [count, setCount]);
-  // Return the App component.
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <p>
-          Page has been open for <code>{count}</code> seconds.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </p>
-      </header>
-    </div>
-  );
+	return (
+		<MapContainer center={[500, 500]} zoom={1} crs={CRS.Simple}>
+			<ImageOverlay
+				bounds={new LatLngBounds([0, 0], [1000, 1000])}
+				url="/map_collier.png"
+			/>
+		</MapContainer>
+	);
 }
 
 export default App;
