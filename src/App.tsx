@@ -15,6 +15,8 @@ export const CurrentRoomCtx = createContext<UseRoom>({
 	addToken: () => {},
 	updateTokenPos: () => {},
 	removeToken: () => {},
+	mapUrl: "",
+	setMap: () => {},
 });
 
 function App() {
