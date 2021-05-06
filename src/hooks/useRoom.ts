@@ -21,6 +21,7 @@ export interface TokenData {
 
 export interface UseRoom {
 	color: string;
+	mapUrl: string;
 	markers: MarkerData[];
 	tokens: TokenData[];
 	addToken: (pos: LatLngExpression, imgUrl: string) => void;
@@ -57,10 +58,12 @@ export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
 		});
 
 		socketRef.current.on("markers_updated", (markers) => {
+			console.log("Markers updated", markers);
 			setMarkers(() => markers);
 		});
 
 		socketRef.current.on("tokens_updated", (tokens) => {
+			console.log("Tokens updated", tokens);
 			setTokens(() => tokens);
 		});
 
@@ -87,10 +90,12 @@ export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
 	};
 
 	const removeToken = (id: string) => {
+		console.log("Sending remove request", id);
 		socketRef.current?.emit("remove_token", roomId, id);
 	};
 
 	return {
+		mapUrl: "/maps/Garde:J",
 		color,
 		markers,
 		tokens,

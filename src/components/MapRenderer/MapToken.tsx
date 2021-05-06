@@ -21,13 +21,19 @@ export default function MapToken({
 	id: string;
 	size: number;
 }) {
-	const updateTokenPos = useContext(CurrentRoomCtx).updateTokenPos;
+	const { updateTokenPos, removeToken } = useContext(CurrentRoomCtx);
 	const [draggable, setDraggable] = useState(false);
 	const markerRef = useRef<LeafletMarker>(null);
 	const eventHandlers = useMemo<LeafletEventHandlerFnMap>(
 		() => ({
 			click() {
 				toggleDraggable();
+			},
+			keyup(e) {
+				if (e.originalEvent.key !== "Backspace") return;
+				console.log("Removing token " + id);
+
+				removeToken(id);
 			},
 			dragend() {
 				const marker = markerRef.current;
@@ -51,7 +57,7 @@ export default function MapToken({
 			position={pos}
 			key={id}
 			ref={markerRef}
-			icon={makeMarkerIcon("/tokens/" + img, size)}
+			icon={makeMarkerIcon("/tokens" + img, size)}
 		>
 			{/* <Popup>Character token</Popup> */}
 		</Marker>

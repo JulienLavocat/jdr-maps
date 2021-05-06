@@ -1,5 +1,5 @@
 import { LatLngExpression } from "leaflet";
-import React, { createContext } from "react";
+import React, { createContext, useState } from "react";
 import "./App.css";
 import MapRenderer from "./components/MapRenderer";
 import { useRoom, UseRoom } from "./hooks/useRoom";
@@ -18,6 +18,7 @@ export const CurrentRoomCtx = createContext<UseRoom>({
 });
 
 function App() {
+	const page = useState();
 	const room = useRoom("jdr");
 
 	return (
