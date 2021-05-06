@@ -1,24 +1,24 @@
 import { LatLngExpression } from "leaflet";
-import React, { createContext } from "react";
+import React, { createContext, useState } from "react";
 import "./App.css";
 import MapRenderer from "./components/MapRenderer";
-import { useRoom } from "./hooks/useRoom";
+import { useRoom, UseRoom } from "./hooks/useRoom";
 
 interface AppProps {}
 
-export const CurrentRoomCtx = createContext<{
-	color: string;
-	markers: { id: string; pos: LatLngExpression; color: string }[];
-	addMarker: (pos: LatLngExpression) => void;
-	removeMarker: (id: string) => void;
-}>({
+export const CurrentRoomCtx = createContext<UseRoom>({
 	color: "black",
 	markers: [],
+	tokens: [],
 	addMarker: () => {},
-	removeMarker: (id: string) => {},
+	removeMarker: () => {},
+	addToken: () => {},
+	updateTokenPos: () => {},
+	removeToken: () => {},
 });
 
 function App() {
+	const page = useState();
 	const room = useRoom("jdr");
 
 	return (

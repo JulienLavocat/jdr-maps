@@ -1,51 +1,46 @@
 import { CRS, LatLngBounds } from "leaflet";
 import React, { useContext } from "react";
-import {
-	ImageOverlay,
-	MapContainer,
-	Marker,
-	MarkerProps,
-	Popup,
-	useMapEvents,
-} from "react-leaflet";
+import { ImageOverlay, MapContainer, useMapEvents } from "react-leaflet";
 import { CurrentRoomCtx } from "../../App";
-import { makeMarkerIcon, MarkerColors } from "./MarkerIcons";
+import { MapPin } from "./MapPin";
+import MapToken from "./MapToken";
+import TokenSpawner from "./TokenSelector";
 
 export default function MapRenderer() {
-	const { markers, removeMarker } = useContext(CurrentRoomCtx);
+	const { markers, tokens } = useContext(CurrentRoomCtx);
 
 	return (
-		<MapContainer center={[500, 500]} zoom={0} crs={CRS.Simple}>
-			<ImageOverlay
-				bounds={new LatLngBounds([0, 0], [1000, 1000])}
-				url="/map_collier.png"
-			/>
-			{markers.map((e) => (
-				<ColoredMaker
-					title="sqdq"
-					position={e.pos}
-					color={e.color}
-					key={e.id}
-					eventHandlers={{
-						dblclick: () => removeMarker(e.id),
-					}}
-				>
-					<Popup></Popup>
-				</ColoredMaker>
-			))}
-			<MapEventsHandler />
-		</MapContainer>
+		<div>
+			<MapContainer center={[500, 500]} zoom={0} crs={CRS.Simple}>
+				<ImageOverlay
+					bounds={new LatLngBounds([0, 0], [1000, 1000])}
+					url="/maps/Garde.jpg"
+				/>
+				{markers.map((e) => (
+					<MapPin color={e.color} id={e.id} pos={e.pos} key={e.id} />
+				))}
+				{tokens.map((e) => {
+					return (
+						<MapToken
+							id={e.id}
+							img={e.imgUrl}
+							pos={e.pos}
+							size={e.size}
+							key={e.id}
+						/>
+					);
+				})}
+				<MapEventsHandler />
+			</MapContainer>
+			<TokenSpawner />
+		</div>
 	);
-}
-
-function ColoredMaker(props: MarkerProps & { color: MarkerColors | string }) {
-	return <Marker {...props} icon={makeMarkerIcon(props.color)}></Marker>;
 }
 
 function MapEventsHandler() {
 	const { addMarker } = useContext(CurrentRoomCtx);
 
-	const map = useMapEvents({
+	useMapEvents({
 		click: (e) => {
 			addMarker(e.latlng);
 		},
