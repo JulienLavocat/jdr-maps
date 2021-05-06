@@ -1,7 +1,6 @@
-import { map } from "leaflet";
 import React, { useContext, useState } from "react";
-import { CurrentRoomCtx } from "../../App";
-import tokensIndex from "./tokens.json";
+import { CurrentRoomCtx } from "../../../App";
+import tokensIndex from "../tokens.json";
 
 const tokens: Record<
 	string,
@@ -13,7 +12,7 @@ const tokens: Record<
 
 const categories: string[] = Object.keys(tokens);
 
-export default function TokenSpawner() {
+export default function TokenSpawner({ onBack }: { onBack: () => void }) {
 	const { addToken } = useContext(CurrentRoomCtx);
 	const [category, setCategory] = useState("");
 
@@ -40,6 +39,7 @@ export default function TokenSpawner() {
 					</button>
 				</div>
 			)}
+			<button onClick={onBack}>Back to menu</button>
 		</div>
 	);
 }
