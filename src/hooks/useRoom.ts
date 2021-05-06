@@ -29,11 +29,13 @@ export interface UseRoom {
 	removeToken: (id: string) => void;
 	addMarker: (pos: LatLngExpression) => void;
 	removeMarker: (id: string) => void;
+	setMap: (mapUrl: string) => void;
 }
 
 export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
 	const [markers, setMarkers] = useState<MarkerData[]>([]);
 	const [tokens, setTokens] = useState<TokenData[]>([]);
+	const [mapUrl, setMapUrl] = useState<string>("");
 	const socketRef = useRef<Socket>();
 	const [color, setColor] = useState<string>("black");
 
@@ -55,6 +57,7 @@ export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
 
 			setMarkers(data.markers);
 			setTokens(data.tokens);
+			setMapUrl(data.mapUrl);
 		});
 
 		socketRef.current.on("markers_updated", (markers) => {
@@ -65,6 +68,11 @@ export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
 		socketRef.current.on("tokens_updated", (tokens) => {
 			console.log("Tokens updated", tokens);
 			setTokens(() => tokens);
+		});
+
+		socketRef.current.on("set_map", (mapUrl: string) => {
+			console.log("Map updated", mapUrl);
+			setMapUrl(() => mapUrl);
 		});
 
 		return () => {
@@ -94,8 +102,16 @@ export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
 		socketRef.current?.emit("remove_token", roomId, id);
 	};
 
+	const setMap = (mapUrl: string) => {
+		socketRef.current?.emit("set_map", roomId, mapUrl);
+	};
+
+	const summonTo = (pos: LatLngExpression) => {
+		socketRef.current?.emit("summon_to", roomId, pos);
+	};
+
 	return {
-		mapUrl: "/maps/Garde:J",
+		mapUrl,
 		color,
 		markers,
 		tokens,
@@ -104,5 +120,6 @@ export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
 		addToken,
 		updateTokenPos,
 		removeToken,
+		setMap,
 	};
 };
