@@ -4,10 +4,35 @@ import socketIO, { Socket } from "socket.io-client";
 
 const SOCKET_SERVER_URL = "localhost:8082";
 
-export const useRoom = (roomId: string) => {
-	const [markers, setMarkers] = useState<
-		{ id: string; pos: LatLngExpression; color: string }[]
-	>([]); // Sent and received messages
+export interface MarkerData {
+	id: string;
+	pos: LatLngExpression;
+	color: string;
+	ownerId: string;
+}
+
+export interface TokenData {
+	id: string;
+	pos: LatLngExpression;
+	ownerId: string;
+	imgUrl: string;
+	size: number;
+}
+
+export interface UseRoom {
+	color: string;
+	markers: MarkerData[];
+	tokens: TokenData[];
+	addToken: (pos: LatLngExpression, imgUrl: string) => void;
+	updateTokenPos: (tokenId: string, pos: LatLngExpression) => void;
+	removeToken: (id: string) => void;
+	addMarker: (pos: LatLngExpression) => void;
+	removeMarker: (id: string) => void;
+}
+
+export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
+	const [markers, setMarkers] = useState<MarkerData[]>([]);
+	const [tokens, setTokens] = useState<TokenData[]>([]);
 	const socketRef = useRef<Socket>();
 	const [color, setColor] = useState<string>("black");
 
@@ -28,22 +53,22 @@ export const useRoom = (roomId: string) => {
 			if (socketRef.current?.id === data.id) setColor(data.color);
 
 			setMarkers(data.markers);
+			setTokens(data.tokens);
 		});
 
 		socketRef.current.on("markers_updated", (markers) => {
-			console.log(markers);
 			setMarkers(() => markers);
 		});
 
-		// Destroys the socket reference
-		// when the connection is closed
+		socketRef.current.on("tokens_updated", (tokens) => {
+			setTokens(() => tokens);
+		});
+
 		return () => {
 			socketRef.current?.disconnect();
 		};
 	}, [roomId]);
 
-	// Sends a message to the server that
-	// forwards it to all users in the same room
 	const addMarker = (pos: LatLngExpression) => {
 		socketRef.current?.emit("add_marker", roomId, pos, color);
 	};
@@ -53,5 +78,26 @@ export const useRoom = (roomId: string) => {
 		socketRef.current?.emit("remove_marker", roomId, id);
 	};
 
-	return { color, markers, addMarker, removeMarker };
+	const addToken = (pos: LatLngExpression, imgUrl: string) => {
+		socketRef.current?.emit("add_token", roomId, pos, imgUrl);
+	};
+
+	const updateTokenPos = (tokenId: string, pos: LatLngExpression) => {
+		socketRef.current?.emit("update_token_pos", roomId, tokenId, pos);
+	};
+
+	const removeToken = (id: string) => {
+		socketRef.current?.emit("remove_token", roomId, id);
+	};
+
+	return {
+		color,
+		markers,
+		tokens,
+		addMarker,
+		removeMarker,
+		addToken,
+		updateTokenPos,
+		removeToken,
+	};
 };

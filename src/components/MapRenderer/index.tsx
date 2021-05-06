@@ -1,18 +1,13 @@
 import { CRS, LatLngBounds } from "leaflet";
 import React, { useContext } from "react";
-import {
-	ImageOverlay,
-	MapContainer,
-	Marker,
-	MarkerProps,
-	Popup,
-	useMapEvents,
-} from "react-leaflet";
+import { ImageOverlay, MapContainer, useMapEvents } from "react-leaflet";
 import { CurrentRoomCtx } from "../../App";
-import { makeMarkerIcon, MarkerColors } from "./MarkerIcons";
+import { MapPin } from "./MapPin";
+import MapToken from "./MapToken";
 
 export default function MapRenderer() {
-	const { markers, removeMarker } = useContext(CurrentRoomCtx);
+	const { markers, tokens } = useContext(CurrentRoomCtx);
+	console.log("----------------");
 
 	return (
 		<MapContainer center={[500, 500]} zoom={0} crs={CRS.Simple}>
@@ -21,31 +16,27 @@ export default function MapRenderer() {
 				url="/map_collier.png"
 			/>
 			{markers.map((e) => (
-				<ColoredMaker
-					title="sqdq"
-					position={e.pos}
-					color={e.color}
-					key={e.id}
-					eventHandlers={{
-						dblclick: () => removeMarker(e.id),
-					}}
-				>
-					<Popup></Popup>
-				</ColoredMaker>
+				<MapPin color={e.color} id={e.id} pos={e.pos} />
 			))}
+			{tokens.map((e) => {
+				return (
+					<MapToken
+						id={e.id}
+						img={e.imgUrl}
+						pos={e.pos}
+						size={e.size}
+					/>
+				);
+			})}
 			<MapEventsHandler />
 		</MapContainer>
 	);
 }
 
-function ColoredMaker(props: MarkerProps & { color: MarkerColors | string }) {
-	return <Marker {...props} icon={makeMarkerIcon(props.color)}></Marker>;
-}
-
 function MapEventsHandler() {
 	const { addMarker } = useContext(CurrentRoomCtx);
 
-	const map = useMapEvents({
+	useMapEvents({
 		click: (e) => {
 			addMarker(e.latlng);
 		},
