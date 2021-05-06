@@ -1,17 +1,15 @@
+import { LatLngExpression } from "leaflet";
 import { useEffect, useRef, useState } from "react";
 import socketIO, { Socket } from "socket.io-client";
-import { LatLngExpression } from "leaflet";
-import { useRecoilState } from "recoil";
-import { markerColors } from "../MapRenderer/mapState";
 
-const SOCKET_SERVER_URL = "212.47.253.235:8082";
+const SOCKET_SERVER_URL = "localhost:8082";
 
 export const useRoom = (roomId: string) => {
 	const [markers, setMarkers] = useState<
 		{ id: string; pos: LatLngExpression; color: string }[]
 	>([]); // Sent and received messages
 	const socketRef = useRef<Socket>();
-	const [color, setColor] = useRecoilState<string>(markerColors);
+	const [color, setColor] = useState<string>("black");
 
 	useEffect(() => {
 		// Creates a WebSocket connection
@@ -27,7 +25,8 @@ export const useRoom = (roomId: string) => {
 		socketRef.current.on("room_joined", (data) => {
 			console.log("room joined", data);
 
-			setColor(data.color);
+			if (socketRef.current?.id === data.id) setColor(data.color);
+
 			setMarkers(data.markers);
 		});
 

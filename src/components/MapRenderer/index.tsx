@@ -1,29 +1,18 @@
+import { CRS, LatLngBounds } from "leaflet";
 import React, { useContext } from "react";
 import {
-	MapContainer,
-	TileLayer,
-	Marker,
-	Popup,
 	ImageOverlay,
-	useMapEvents,
+	MapContainer,
+	Marker,
 	MarkerProps,
+	Popup,
+	useMapEvents,
 } from "react-leaflet";
-import { CRS, Icon, LatLngBounds, LatLngExpression } from "leaflet";
-import {
-	atom,
-	useRecoilState,
-	useRecoilValue,
-	useSetRecoilState,
-} from "recoil";
-import { MarkerColors, makeMarkerIcon, getRandomColor } from "./MarkerIcons";
-import { nanoid } from "nanoid";
-import { markersState, markerColors } from "./mapState";
-import { useRoom } from "../hooks/useRoom";
-import { CurrentRoomCtx } from "../App";
+import { CurrentRoomCtx } from "../../App";
+import { makeMarkerIcon, MarkerColors } from "./MarkerIcons";
 
 export default function MapRenderer() {
 	const { markers, removeMarker } = useContext(CurrentRoomCtx);
-	const color = useRecoilValue(markerColors);
 
 	return (
 		<MapContainer center={[500, 500]} zoom={0} crs={CRS.Simple}>
@@ -56,11 +45,9 @@ function ColoredMaker(props: MarkerProps & { color: MarkerColors | string }) {
 function MapEventsHandler() {
 	const { addMarker } = useContext(CurrentRoomCtx);
 
-	const setMarkers = useSetRecoilState(markersState);
 	const map = useMapEvents({
 		click: (e) => {
 			addMarker(e.latlng);
-			//setMarkers((old) => [...old, { id: nanoid(), pos: e.latlng }]);
 		},
 	});
 

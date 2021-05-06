@@ -1,21 +1,10 @@
-import React, { createContext, useEffect } from "react";
-import { ReadyState, useSocketIO } from "react-use-websocket";
-import "./App.css";
-import MapRenderer from "./MapRenderer";
-import { io } from "socket.io-client";
-import type { RouteComponentProps } from "react-router";
-import { useRoom } from "./hooks/useRoom";
 import { LatLngExpression } from "leaflet";
+import React, { createContext } from "react";
+import "./App.css";
+import MapRenderer from "./components/MapRenderer";
+import { useRoom } from "./hooks/useRoom";
 
 interface AppProps {}
-
-const connectionStatus = {
-	[ReadyState.CONNECTING]: "Connecting",
-	[ReadyState.OPEN]: "Open",
-	[ReadyState.CLOSING]: "Closing",
-	[ReadyState.CLOSED]: "Closed",
-	[ReadyState.UNINSTANTIATED]: "Uninstantiated",
-};
 
 export const CurrentRoomCtx = createContext<{
 	color: string;
@@ -39,30 +28,6 @@ function App() {
 			</CurrentRoomCtx.Provider>
 		</div>
 	);
-}
-
-function WebsocketHandler({ roomId }: { roomId: string }) {
-	// useEffect(() => {
-	// 	const socket = io("localhost:8082", {
-	// 		transports: ["websocket"],
-	// 	});
-
-	// 	socket.on("connect", () => {
-	// 		socket.emit("join", roomId);
-	// 	});
-
-	// 	socket.on("connect_error", (err) => {
-	// 		console.log("error", err);
-	// 	});
-
-	// 	socket.on("joined", (id) => {
-	// 		console.log("Joined room", id);
-	// 	});
-
-	// 	return () => {};
-	// }, []);
-
-	return null;
 }
 
 export default App;
