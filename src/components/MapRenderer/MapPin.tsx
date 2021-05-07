@@ -22,11 +22,9 @@ export const MapPin = ({
 			position={pos}
 			color={color}
 			eventHandlers={{
-				dblclick: () => removeMarker(id),
+				click: () => removeMarker(id),
 			}}
-		>
-			<Popup key={"popup" + id}></Popup>
-		</ColoredMaker>
+		></ColoredMaker>
 	);
 };
 

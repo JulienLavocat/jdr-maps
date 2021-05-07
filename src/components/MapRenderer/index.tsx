@@ -1,6 +1,11 @@
 import { CRS, LatLngBounds } from "leaflet";
 import React, { useContext } from "react";
-import { ImageOverlay, MapContainer, useMapEvents } from "react-leaflet";
+import {
+	ImageOverlay,
+	MapContainer,
+	useMap,
+	useMapEvents,
+} from "react-leaflet";
 import { MapPin } from "./MapPin";
 import MapToken from "./MapToken";
 import AdminTools from "./AdminTools";
@@ -8,7 +13,6 @@ import { useHistory, useParams } from "react-router";
 import { CurrentRoomCtx } from "../../pages/Room/index";
 
 export default function MapRenderer() {
-	const { roomId } = useParams<{ roomId: string }>();
 	const { markers, tokens, mapUrl } = useContext(CurrentRoomCtx);
 
 	return (
@@ -18,6 +22,7 @@ export default function MapRenderer() {
 				zoom={0}
 				crs={CRS.Simple}
 				doubleClickZoom={false}
+				attributionControl={false}
 			>
 				<ImageOverlay
 					bounds={new LatLngBounds([0, 0], [1000, 1000])}
@@ -46,9 +51,10 @@ export default function MapRenderer() {
 
 function MapEventsHandler() {
 	const { addMarker } = useContext(CurrentRoomCtx);
+	const map = useMap();
 
 	useMapEvents({
-		click: (e) => {
+		dblclick: (e) => {
 			addMarker(e.latlng);
 		},
 	});
