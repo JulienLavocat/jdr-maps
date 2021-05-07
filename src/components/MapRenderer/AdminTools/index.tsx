@@ -23,9 +23,9 @@ export default function AdminTools() {
 				</div>
 			);
 		case "tokenSpawner":
-			return <TokenSpawner onBack={() => setCategory("")} />;
+			return <TokenSpawner />;
 		case "mapSelector":
-			return <MapSelector onBack={() => setCategory("")} />;
+			return <MapSelector />;
 		default:
 			return <div>Unknown category !</div>;
 	}
