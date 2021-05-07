@@ -2,30 +2,24 @@ import React, { useState } from "react";
 import tokensIndex from "../tokens.json";
 import MapSelector from "./MapSelector";
 import TokenSpawner from "./TokenSpawner";
+import { Button, ButtonGroup } from "react-bootstrap";
 
-const tokens: Record<
-	string,
-	{ name: string; displayName: string; url: string }[]
-> = tokensIndex as Record<
-	string,
-	{ name: string; displayName: string; url: string }[]
->;
-
-const categories: string[] = Object.keys(tokens);
-
-export default function AdminToos() {
+export default function AdminTools() {
 	const [category, setCategory] = useState("");
 
 	switch (category) {
 		case "":
 			return (
 				<div>
-					<button onClick={() => setCategory("tokenSpawner")}>
+					<Button
+						className="mr-5"
+						onClick={() => setCategory("tokenSpawner")}
+					>
 						Tokens
-					</button>
-					<button onClick={() => setCategory("mapSelector")}>
+					</Button>
+					<Button onClick={() => setCategory("mapSelector")}>
 						Maps
-					</button>
+					</Button>
 				</div>
 			);
 		case "tokenSpawner":

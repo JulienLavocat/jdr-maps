@@ -7,6 +7,7 @@ import HomePage from "./pages/HomePage";
 import MapUploader from "./pages/MapUploader.tsx/index";
 import Room from "./pages/Room";
 import RoomChooser from "./pages/RoomChooser/index";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 ReactDOM.render(
 	<React.StrictMode>

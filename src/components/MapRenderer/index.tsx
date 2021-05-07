@@ -1,20 +1,20 @@
 import { CRS, LatLngBounds } from "leaflet";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
+import { Button, Modal } from "react-bootstrap";
 import {
 	ImageOverlay,
 	MapContainer,
 	useMap,
 	useMapEvents,
 } from "react-leaflet";
+import { CurrentRoomCtx } from "../../pages/Room/index";
 import { MapPin } from "./MapPin";
 import MapToken from "./MapToken";
-import AdminTools from "./AdminTools";
-import { useHistory, useParams } from "react-router";
-import { CurrentRoomCtx } from "../../pages/Room/index";
+import MapsAPI from "../../utils/MapsAPI";
 
 export default function MapRenderer() {
 	const { markers, tokens, mapUrl } = useContext(CurrentRoomCtx);
-
+	const [showMapSelector, setShowMapSelector] = useState(false);
 	return (
 		<div>
 			<MapContainer
@@ -26,7 +26,7 @@ export default function MapRenderer() {
 			>
 				<ImageOverlay
 					bounds={new LatLngBounds([0, 0], [1000, 1000])}
-					url={mapUrl}
+					url={MapsAPI.getMapUrl(mapUrl)}
 				/>
 				{markers.map((e) => (
 					<MapPin color={e.color} id={e.id} pos={e.pos} key={e.id} />
@@ -44,7 +44,6 @@ export default function MapRenderer() {
 				})}
 				<MapEventsHandler />
 			</MapContainer>
-			<AdminTools />
 		</div>
 	);
 }

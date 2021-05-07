@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
-import tokensIndex from "../tokens.json";
+
 import { CurrentRoomCtx } from "../../../pages/Room/index";
+import tokensIndex from "../tokens.json";
+import { Form, Row, Col, InputGroup } from "react-bootstrap";
 
 const tokens: Record<
 	string,
@@ -12,34 +14,57 @@ const tokens: Record<
 
 const categories: string[] = Object.keys(tokens);
 
-export default function TokenSpawner({ onBack }: { onBack: () => void }) {
+export default function TokenSpawner() {
 	const { addToken } = useContext(CurrentRoomCtx);
-	const [category, setCategory] = useState("");
+	const [category, setCategory] = useState(categories[0]);
 
 	return (
-		<div>
-			{category === "" ? (
-				categories.map((e) => (
-					<button onClick={() => setCategory(e)} key={e}>
-						{e}
-					</button>
-				))
-			) : (
-				<div>
-					{Object.values(tokens[category]).map((e) => (
-						<button
-							onClick={() => addToken([500, 500], e.url)}
-							key={category + "/" + e.name}
+		<Form>
+			<Row>
+				<Col lg={3}>
+					<InputGroup>
+						<InputGroup.Prepend>
+							<InputGroup.Text id="basic-addon1">
+								Categorie
+							</InputGroup.Text>
+						</InputGroup.Prepend>
+						<Form.Control
+							as="select"
+							onChange={(e) => setCategory(e.target.value)}
 						>
-							{e.displayName}
-						</button>
-					))}
-					<button onClick={() => setCategory("")} key="back">
-						Back
-					</button>
-				</div>
-			)}
-			<button onClick={onBack}>Back to menu</button>
-		</div>
+							{categories.map((e) => (
+								<option key={e} value={e}>
+									{e}
+								</option>
+							))}
+						</Form.Control>
+					</InputGroup>
+				</Col>
+				<Col lg={4}>
+					<InputGroup>
+						<InputGroup.Prepend>
+							<InputGroup.Text id="basic-addon1">
+								Token
+							</InputGroup.Text>
+						</InputGroup.Prepend>
+						<Form.Control
+							as="select"
+							onChange={(e) => {
+								addToken([500, 500], e.target.value);
+							}}
+						>
+							{Object.values(tokens[category]).map((e) => (
+								<option
+									key={category + "/" + e.name}
+									value={e.url}
+								>
+									{e.displayName}
+								</option>
+							))}
+						</Form.Control>
+					</InputGroup>
+				</Col>
+			</Row>
+		</Form>
 	);
 }
