@@ -13,7 +13,12 @@ export default function MapRenderer() {
 
 	return (
 		<div>
-			<MapContainer center={[500, 500]} zoom={0} crs={CRS.Simple}>
+			<MapContainer
+				center={[500, 500]}
+				zoom={0}
+				crs={CRS.Simple}
+				doubleClickZoom={false}
+			>
 				<ImageOverlay
 					bounds={new LatLngBounds([0, 0], [1000, 1000])}
 					url={mapUrl}
