@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
-import { CurrentRoomCtx } from "../../../App";
 import tokensIndex from "../tokens.json";
+import { CurrentRoomCtx } from "../../../pages/Room/index";
 
 const tokens: Record<
 	string,

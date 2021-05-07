@@ -3,8 +3,8 @@ import { Marker, MarkerProps, Popup } from "react-leaflet";
 import {} from "./MarkerIcons";
 import { MarkerColors, makeMarkerIcon } from "../MapRenderer/MarkerIcons";
 import { MarkerData } from "../../hooks/useRoom";
-import { CurrentRoomCtx } from "../../App";
 import { LatLngExpression } from "leaflet";
+import { CurrentRoomCtx } from "../../pages/Room/index";
 
 export const MapPin = ({
 	pos,

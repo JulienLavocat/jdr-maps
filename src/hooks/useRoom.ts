@@ -2,7 +2,7 @@ import { LatLngExpression } from "leaflet";
 import { useEffect, useRef, useState } from "react";
 import socketIO, { Socket } from "socket.io-client";
 
-const SOCKET_SERVER_URL = "212.47.253.235:8080";
+const SOCKET_SERVER_URL = import.meta.env.SNOWPACK_PUBLIC_API_URL || "/api";
 
 export interface MarkerData {
 	id: string;

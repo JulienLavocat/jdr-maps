@@ -1,8 +1,7 @@
-import React, { useContext, useState } from "react";
-import { CurrentRoomCtx } from "../../../App";
+import React, { useState } from "react";
 import tokensIndex from "../tokens.json";
-import TokenSpawner from "./TokenSpawner";
 import MapSelector from "./MapSelector";
+import TokenSpawner from "./TokenSpawner";
 
 const tokens: Record<
 	string,

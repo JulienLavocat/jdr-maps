@@ -1,8 +1,8 @@
 import { LatLngExpression } from "leaflet";
 import React, { createContext, useState } from "react";
 import "./App.css";
-import MapRenderer from "./components/MapRenderer";
-import { useRoom, UseRoom } from "./hooks/useRoom";
+import MapRenderer from "../../components/MapRenderer";
+import { useRoom, UseRoom } from "../../hooks/useRoom";
 
 interface AppProps {}
 

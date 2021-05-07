@@ -8,7 +8,7 @@ import { MarkerData } from "../../hooks/useRoom";
 import { Marker, Popup } from "react-leaflet";
 import { useRef } from "react";
 import { LatLngExpression } from "leaflet";
-import { CurrentRoomCtx } from "../../App";
+import { CurrentRoomCtx } from "../../pages/Room/index";
 
 export default function MapToken({
 	pos,

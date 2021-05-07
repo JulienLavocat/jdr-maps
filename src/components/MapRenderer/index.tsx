@@ -1,14 +1,15 @@
 import { CRS, LatLngBounds } from "leaflet";
 import React, { useContext } from "react";
 import { ImageOverlay, MapContainer, useMapEvents } from "react-leaflet";
-import { CurrentRoomCtx } from "../../App";
 import { MapPin } from "./MapPin";
 import MapToken from "./MapToken";
 import AdminTools from "./AdminTools";
+import { useHistory, useParams } from "react-router";
+import { CurrentRoomCtx } from "../../pages/Room/index";
 
 export default function MapRenderer() {
+	const { roomId } = useParams<{ roomId: string }>();
 	const { markers, tokens, mapUrl } = useContext(CurrentRoomCtx);
-	console.log(mapUrl);
 
 	return (
 		<div>
