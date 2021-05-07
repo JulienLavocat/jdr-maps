@@ -1,10 +1,9 @@
 import { LatLngExpression } from "leaflet";
 import React, { createContext, useState } from "react";
-import "./App.css";
+import "./Room.css";
 import MapRenderer from "../../components/MapRenderer";
 import { useRoom, UseRoom } from "../../hooks/useRoom";
-
-interface AppProps {}
+import { useParams } from "react-router";
 
 export const CurrentRoomCtx = createContext<UseRoom>({
 	color: "black",
@@ -20,8 +19,8 @@ export const CurrentRoomCtx = createContext<UseRoom>({
 });
 
 function App() {
-	const page = useState();
-	const room = useRoom("jdr");
+	const { roomId } = useParams<{ roomId: string }>();
+	const room = useRoom(roomId);
 
 	return (
 		<div>

@@ -6,7 +6,7 @@ const API = "/api";
 
 export default function MapSelector({ onBack }: { onBack: () => void }) {
 	const setMap = useContext(CurrentRoomCtx).setMap;
-	const [maps, setMaps] = useState([]);
+	const [maps, setMaps] = useState<string[]>([]);
 
 	useEffect(() => {
 		MapsAPI.getMaps().then((res) => setMaps(res.map((e: any) => e.name)));
@@ -17,7 +17,7 @@ export default function MapSelector({ onBack }: { onBack: () => void }) {
 	return (
 		<div>
 			{maps.map((e) => (
-				<button key={e} onClick={() => setMap(e)}>
+				<button key={e} onClick={() => setMap(MapsAPI.getMapUrl(e))}>
 					{e}
 				</button>
 			))}

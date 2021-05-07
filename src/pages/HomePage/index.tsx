@@ -8,7 +8,7 @@ const pages = [
 	},
 	{
 		name: "Join a room",
-		path: "/maps",
+		path: "/rooms",
 	},
 ];
 
