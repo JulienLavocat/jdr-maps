@@ -55,19 +55,19 @@ export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
 
 			if (socketRef.current?.id === data.id) setColor(data.color);
 
-			setMarkers(data.markers);
-			setTokens(data.tokens);
+			setMarkers(Object.values(data.markers));
+			setTokens(Object.values(data.tokens));
 			setMapUrl(data.mapUrl);
 		});
 
 		socketRef.current.on("markers_updated", (markers) => {
 			console.log("Markers updated", markers);
-			setMarkers(() => markers);
+			setMarkers(() => Object.values(markers));
 		});
 
 		socketRef.current.on("tokens_updated", (tokens) => {
 			console.log("Tokens updated", tokens);
-			setTokens(() => tokens);
+			setTokens(() => Object.values(tokens));
 		});
 
 		socketRef.current.on("set_map", (mapUrl: string) => {
