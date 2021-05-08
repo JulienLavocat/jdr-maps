@@ -1,17 +1,70 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import {
+	Button,
+	Col,
+	Form,
+	FormControl,
+	InputGroup,
+	Row,
+} from "react-bootstrap";
+import { useHistory } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { characterName } from "../../utils/state";
 
 export default function RoomChooser() {
 	const rooms = ["jdr"];
+	const [room, setRoom] = useState(rooms[0]);
+	const [name, setName] = useRecoilState(characterName);
+
+	const history = useHistory();
 
 	return (
 		<div>
 			<ul>
-				{rooms.map((e) => (
-					<li key={e}>
-						<Link to={`/rooms/${e}`}>{e}</Link>
-					</li>
-				))}
+				<Row sm={6}>
+					<Col sm={6}>
+						<Form
+							onSubmit={(e) => {
+								e.preventDefault();
+								history.push("/rooms/" + room);
+							}}
+						>
+							<InputGroup className="mb-3">
+								<InputGroup.Prepend>
+									<Form.Control
+										as="select"
+										value={room}
+										onChange={(e) =>
+											setRoom(e.target.value)
+										}
+									>
+										{rooms.map((e) => (
+											<option key={e} value={e}>
+												{e}
+											</option>
+										))}
+									</Form.Control>
+								</InputGroup.Prepend>
+								<Col sm={4}>
+									<FormControl
+										placeholder="Character name"
+										value={name}
+										required={true}
+										onChange={(e) =>
+											setName(e.target.value)
+										}
+									/>
+								</Col>
+
+								<InputGroup.Append>
+									<Button variant="success" type="submit">
+										Rejoindre
+									</Button>
+								</InputGroup.Append>
+							</InputGroup>
+						</Form>
+					</Col>
+				</Row>
 			</ul>
 		</div>
 	);

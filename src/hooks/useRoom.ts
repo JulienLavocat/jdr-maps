@@ -1,6 +1,9 @@
 import { LatLngExpression } from "leaflet";
 import { useEffect, useRef, useState } from "react";
+import { useSetRecoilState } from "recoil";
 import socketIO, { Socket } from "socket.io-client";
+import { useChat, UseChat, MessageSender } from "./useChat";
+import { senderIdState } from "../utils/state";
 
 const SOCKET_SERVER_URL = import.meta.env.SNOWPACK_PUBLIC_API_URL || "/api";
 
@@ -30,14 +33,18 @@ export interface UseRoom {
 	addMarker: (pos: LatLngExpression) => void;
 	removeMarker: (id: string) => void;
 	setMap: (mapUrl: string) => void;
+	chats: { name: string; id: string }[];
+	useChat: (channelId: string) => UseChat;
 }
 
 export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
+	const [chats, setChats] = useState<{ name: string; id: string }[]>([]);
 	const [markers, setMarkers] = useState<MarkerData[]>([]);
 	const [tokens, setTokens] = useState<TokenData[]>([]);
 	const [mapUrl, setMapUrl] = useState<string>("");
 	const socketRef = useRef<Socket>();
 	const [color, setColor] = useState<string>("black");
+	const setSenderId = useSetRecoilState<string>(senderIdState);
 
 	useEffect(() => {
 		// Creates a WebSocket connection
@@ -48,16 +55,18 @@ export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
 
 		socketRef.current.on("connect", () => {
 			console.log("connected");
+			setSenderId(socketRef.current?.id || "");
 		});
 
 		socketRef.current.on("room_joined", (data) => {
 			console.log("room joined", data);
 
 			if (socketRef.current?.id === data.id) setColor(data.color);
-
+			console.log("chats", data.chats);
 			setMarkers(Object.values(data.markers));
 			setTokens(Object.values(data.tokens));
 			setMapUrl(data.mapUrl);
+			setChats(data.chats);
 		});
 
 		socketRef.current.on("markers_updated", (markers) => {
@@ -121,5 +130,7 @@ export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
 		updateTokenPos,
 		removeToken,
 		setMap,
+		chats,
+		useChat: (channelId: string) => useChat(socketRef, channelId),
 	};
 };
