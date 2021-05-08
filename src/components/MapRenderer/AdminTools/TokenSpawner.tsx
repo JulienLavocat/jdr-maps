@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 
 import { CurrentRoomCtx } from "../../../pages/Room/index";
 import tokensIndex from "../tokens2.json";
-import { Form, Row, Col, InputGroup } from "react-bootstrap";
+import { Form, Row, Col, InputGroup, Button } from "react-bootstrap";
 
 type TokenIndex = Record<
 	string,
@@ -41,6 +41,7 @@ export default function TokenSpawner() {
 								const c = Object.keys(tokens[e.target.value]);
 								setCategories(c);
 								setCategory(c[0]);
+								setCurrentToken(tokens[mod][category][0].url);
 							}}
 						>
 							{mods.map((e) => (
@@ -82,7 +83,6 @@ export default function TokenSpawner() {
 						<Form.Control
 							as="select"
 							onChange={(e) => {
-								addToken([500, 500], e.target.value);
 								setCurrentToken(e.target.value);
 							}}
 						>
@@ -93,6 +93,14 @@ export default function TokenSpawner() {
 							))}
 						</Form.Control>
 					</InputGroup>
+				</Col>
+				<Col lg={1}>
+					<Button
+						variant="success"
+						onClick={() => addToken([500, 500], currentToken || "")}
+					>
+						Add
+					</Button>
 				</Col>
 			</Row>
 			{currentToken ? (
