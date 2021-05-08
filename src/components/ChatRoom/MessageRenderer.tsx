@@ -48,7 +48,11 @@ export default function MessageRenderer({
 		>
 			<strong>{sender.name}</strong>
 			<p>{content}</p>
-			{gif ? <img src={gif}></img> : null}
+			{gif ? (
+				<video autoPlay={true} loop={true}>
+					<source src={gif} type="video/mp4" />
+				</video>
+			) : null}
 		</div>
 	);
 }
