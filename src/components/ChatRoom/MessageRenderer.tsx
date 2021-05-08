@@ -16,7 +16,6 @@ export default function MessageRenderer({
 		switch (param[1]) {
 			case "@":
 				if (param[2] === senderId) isUserMentionned = true;
-				console.log(param[2], users[param[2]]?.name, users);
 
 				content = replaceText(
 					content,

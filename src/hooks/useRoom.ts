@@ -61,7 +61,6 @@ export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
 			console.log("room joined", data);
 
 			if (userId === data.id) setColor(data.color);
-			console.log("chats", data.chats);
 			setMarkers(Object.values(data.markers));
 			setTokens(Object.values(data.tokens));
 			setMapUrl(data.mapUrl);
@@ -69,17 +68,14 @@ export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
 		});
 
 		socketRef.current.on("markers_updated", (markers) => {
-			console.log("Markers updated", markers);
 			setMarkers(() => Object.values(markers));
 		});
 
 		socketRef.current.on("tokens_updated", (tokens) => {
-			console.log("Tokens updated", tokens);
 			setTokens(() => Object.values(tokens));
 		});
 
 		socketRef.current.on("set_map", (mapUrl: string) => {
-			console.log("Map updated", mapUrl);
 			setMapUrl(() => mapUrl);
 		});
 
@@ -93,7 +89,6 @@ export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
 	};
 
 	const removeMarker = (id: string) => {
-		console.log("remove", id);
 		socketRef.current?.emit("remove_marker", roomId, id);
 	};
 
@@ -106,7 +101,6 @@ export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
 	};
 
 	const removeToken = (id: string) => {
-		console.log("Sending remove request", id);
 		socketRef.current?.emit("remove_token", roomId, id);
 	};
 

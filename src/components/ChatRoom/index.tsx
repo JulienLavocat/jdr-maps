@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Button, Col, Container, Form, Navbar, Row } from "react-bootstrap";
 import { CurrentRoomCtx } from "../../pages/Room/index";
 import { Message, MessageSender } from "../../hooks/useChat";
@@ -52,6 +52,18 @@ function MessagesRenderer({
 	const ref = useRef<ScrollableFeed>(null);
 	const senderId = useRecoilValue(userIdState);
 
+	const msgs = useMemo(() => {
+		return messages.map((msg) => (
+			<MessageRenderer
+				content={msg.content}
+				id={msg.id}
+				sender={msg.sender}
+				senderId={senderId}
+				users={users}
+			/>
+		));
+	}, [messages]);
+
 	useEffect(() => {
 		ref.current?.scrollToBottom();
 		return () => {};
@@ -68,15 +80,7 @@ function MessagesRenderer({
 					</div>
 					<ScrollableFeed className="chat" ref={ref}>
 						{isReady ? (
-							messages.map((msg) => (
-								<MessageRenderer
-									content={msg.content}
-									id={msg.id}
-									sender={msg.sender}
-									senderId={senderId}
-									users={users}
-								/>
-							))
+							msgs
 						) : (
 							<div className="text-center mt-5 pt-5">
 								<p className="lead text-center">
