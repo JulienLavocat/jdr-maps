@@ -22,6 +22,7 @@ export default function TokenSpawner() {
 	const [category, setCategory] = useState<string>(
 		Object.keys(tokens[mod])[0],
 	);
+	const [currentToken, setCurrentToken] = useState<string | null>(null);
 
 	return (
 		<Form>
@@ -82,6 +83,7 @@ export default function TokenSpawner() {
 							as="select"
 							onChange={(e) => {
 								addToken([500, 500], e.target.value);
+								setCurrentToken(e.target.value);
 							}}
 						>
 							{Object.values(tokens[mod][category]).map((e) => (
@@ -93,6 +95,13 @@ export default function TokenSpawner() {
 					</InputGroup>
 				</Col>
 			</Row>
+			{currentToken ? (
+				<img
+					src={"/tokens" + currentToken}
+					width={200}
+					height={200}
+				></img>
+			) : null}
 		</Form>
 	);
 }
