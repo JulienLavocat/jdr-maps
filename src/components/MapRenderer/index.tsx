@@ -1,5 +1,5 @@
-import { CRS, LatLngBounds } from "leaflet";
-import React, { useContext, useState } from "react";
+import { CRS, LatLngBounds, LatLngExpression } from "leaflet";
+import React, { useContext, useRef, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import {
 	ImageOverlay,
@@ -49,13 +49,39 @@ export default function MapRenderer() {
 }
 
 function MapEventsHandler() {
-	const { addMarker } = useContext(CurrentRoomCtx);
+	const { addMarker, flyTo, on } = useContext(CurrentRoomCtx);
 	const map = useMap();
+	const mousePos = useRef(map.getCenter());
+
+	const lastKeydown = useRef(Date.now());
+	const lastFlyTo = useRef(Date.now());
+
+	on("fly_to", (pos: LatLngExpression, zoom: number) => map.flyTo(pos, zoom));
 
 	useMapEvents({
 		dblclick: (e) => {
 			addMarker(e.latlng);
 		},
+		keydown: (e) => {
+			const { ctrlKey, code } = e.originalEvent;
+
+			if (ctrlKey && code === "KeyB") {
+				console.log(
+					Date.now(),
+					lastKeydown.current,
+					Date.now() - lastKeydown.current,
+				);
+
+				if (Date.now() - lastKeydown.current < 1000) return;
+				else lastKeydown.current = Date.now();
+
+				if (Date.now() - lastFlyTo.current < 5000) return;
+
+				flyTo(mousePos.current, map.getZoom());
+				lastFlyTo.current = Date.now();
+			}
+		},
+		mousemove: (e) => (mousePos.current = e.latlng),
 	});
 
 	return null;

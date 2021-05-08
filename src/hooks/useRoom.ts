@@ -33,11 +33,17 @@ export interface UseRoom {
 	addMarker: (pos: LatLngExpression) => void;
 	removeMarker: (id: string) => void;
 	setMap: (mapUrl: string) => void;
+	flyTo: (pos: LatLngExpression, zoom: number) => void;
 	chats: { name: string; id: string }[];
 	useChat: (channelId: string) => UseChat;
+	on: (event: string, handler: (...args: any[]) => void) => void;
 }
 
-export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
+export type RoomEventsMap = Record<string, (...args: any[]) => void>;
+
+export const useRoom: (roomId: string, events: RoomEventsMap) => UseRoom = (
+	roomId: string,
+) => {
 	const [chats, setChats] = useState<{ name: string; id: string }[]>([]);
 	const [markers, setMarkers] = useState<MarkerData[]>([]);
 	const [tokens, setTokens] = useState<TokenData[]>([]);
@@ -108,8 +114,12 @@ export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
 		socketRef.current?.emit("set_map", roomId, mapUrl);
 	};
 
-	const summonTo = (pos: LatLngExpression) => {
-		socketRef.current?.emit("summon_to", roomId, pos);
+	const flyTo = (pos: LatLngExpression, zoom: number) => {
+		socketRef.current?.emit("fly_to", roomId, pos, zoom);
+	};
+
+	const on = (event: string, handler: (...args: any[]) => void) => {
+		socketRef.current?.on(event, (...args) => handler(...args));
 	};
 
 	return {
@@ -124,6 +134,8 @@ export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
 		removeToken,
 		setMap,
 		chats,
+		flyTo,
 		useChat: (channelId: string) => useChat(socketRef, channelId),
+		on,
 	};
 };

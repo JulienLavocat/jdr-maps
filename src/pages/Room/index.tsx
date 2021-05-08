@@ -10,6 +10,7 @@ import MapSelector from "../../components/MapRenderer/AdminTools/MapSelector";
 import ChatRoom from "../../components/ChatRoom";
 import { useRecoilValue } from "recoil";
 import { characterName } from "../../utils/state";
+import { useMap } from "react-leaflet";
 
 export const CurrentRoomCtx = createContext<UseRoom>({
 	color: "black",
@@ -30,11 +31,13 @@ export const CurrentRoomCtx = createContext<UseRoom>({
 		sendMessage: () => {},
 		users: {},
 	}),
+	flyTo: () => {},
+	on: () => {},
 });
 
 function App() {
 	const { roomId } = useParams<{ roomId: string }>();
-	const room = useRoom(roomId);
+	const room = useRoom(roomId, {});
 
 	return (
 		<div>
