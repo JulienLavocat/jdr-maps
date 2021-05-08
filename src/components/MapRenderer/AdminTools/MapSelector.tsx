@@ -11,7 +11,6 @@ export default function MapSelector() {
 
 	useEffect(() => {
 		MapsAPI.getMaps().then((res) => {
-			console.log("current map", mapUrl);
 			setMaps(res.map((e: any) => e.name));
 		});
 

@@ -27,8 +27,6 @@ export default function MapToken({
 		() => ({
 			keyup(e) {
 				if (e.originalEvent.key !== "Backspace") return;
-				console.log("Removing token " + id);
-
 				removeToken(id);
 			},
 			dragend() {
