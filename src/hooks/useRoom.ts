@@ -1,9 +1,9 @@
 import { LatLngExpression } from "leaflet";
 import { useEffect, useRef, useState } from "react";
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilState } from "recoil";
 import socketIO, { Socket } from "socket.io-client";
 import { useChat, UseChat, MessageSender } from "./useChat";
-import { senderIdState } from "../utils/state";
+import { userIdState } from "../utils/state";
 
 const SOCKET_SERVER_URL = import.meta.env.SNOWPACK_PUBLIC_API_URL || "/api";
 
@@ -44,24 +44,23 @@ export const useRoom: (roomId: string) => UseRoom = (roomId: string) => {
 	const [mapUrl, setMapUrl] = useState<string>("");
 	const socketRef = useRef<Socket>();
 	const [color, setColor] = useState<string>("black");
-	const setSenderId = useSetRecoilState<string>(senderIdState);
+	const [userId] = useRecoilState<string>(userIdState);
 
 	useEffect(() => {
 		// Creates a WebSocket connection
 		socketRef.current = socketIO(SOCKET_SERVER_URL, {
 			transports: ["websocket"],
-			query: { roomId },
+			query: { roomId, userId },
 		});
 
 		socketRef.current.on("connect", () => {
-			console.log("connected");
-			setSenderId(socketRef.current?.id || "");
+			console.log("connected", "userId", userId);
 		});
 
 		socketRef.current.on("room_joined", (data) => {
 			console.log("room joined", data);
 
-			if (socketRef.current?.id === data.id) setColor(data.color);
+			if (userId === data.id) setColor(data.color);
 			console.log("chats", data.chats);
 			setMarkers(Object.values(data.markers));
 			setTokens(Object.values(data.tokens));

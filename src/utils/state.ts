@@ -6,7 +6,7 @@ export const characterName = atom({
 	default: "",
 });
 
-export const senderIdState = atom({
+export const userIdState = atom({
 	key: "chat-id-state",
 	default: nanoid(),
 });

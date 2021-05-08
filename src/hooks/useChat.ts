@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import socketIO, { Socket } from "socket.io-client";
-import { senderIdState, characterName } from "../utils/state";
+import { userIdState, characterName } from "../utils/state";
 import { useRecoilValue } from "recoil";
 
 const SOCKET_SERVER_URL = import.meta.env.SNOWPACK_PUBLIC_API_URL || "/api";
@@ -36,7 +36,7 @@ export const useChat: (
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [isReady, setReady] = useState<boolean>(false);
 	const [users, setUsers] = useState<Record<string, MessageSender>>({});
-	const senderId = useRecoilValue<string>(senderIdState);
+	const senderId = useRecoilValue<string>(userIdState);
 	const senderName = useRecoilValue<string>(characterName);
 
 	useEffect(() => {
@@ -55,9 +55,16 @@ export const useChat: (
 			},
 		);
 
+		socket.current?.on(
+			"new_user",
+			(channelId, users: Record<string, MessageSender>) => {
+				if (channelId !== id) return;
+				setUsers(() => users);
+			},
+		);
+
 		socket.current?.on("new_message", (channelId, messages: Message[]) => {
 			if (channelId !== id) return;
-
 			setMessages(() => messages);
 		});
 

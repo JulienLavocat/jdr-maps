@@ -8,7 +8,7 @@ import ScrollableFeed from "react-scrollable-feed";
 import "./chat.css";
 import MessageRenderer from "./MessageRenderer";
 import { useRecoilValue } from "recoil";
-import { senderIdState, characterName } from "../../utils/state";
+import { userIdState, characterName } from "../../utils/state";
 
 export default function ChatRoom({
 	channel,
@@ -50,7 +50,7 @@ function MessagesRenderer({
 	users: Record<string, MessageSender>;
 }) {
 	const ref = useRef<ScrollableFeed>(null);
-	const senderId = useRecoilValue(senderIdState);
+	const senderId = useRecoilValue(userIdState);
 
 	useEffect(() => {
 		ref.current?.scrollToBottom();
