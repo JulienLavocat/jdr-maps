@@ -23,6 +23,7 @@ export default function TokenSpawner() {
 		Object.keys(tokens[mod])[0],
 	);
 	const [currentToken, setCurrentToken] = useState<string | null>(null);
+	console.log(mod, category, currentToken);
 
 	return (
 		<Form>
