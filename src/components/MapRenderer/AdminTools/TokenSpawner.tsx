@@ -39,9 +39,12 @@ export default function TokenSpawner() {
 							onChange={(e) => {
 								setMod(e.target.value);
 								const c = Object.keys(tokens[e.target.value]);
+
 								setCategories(c);
 								setCategory(c[0]);
-								setCurrentToken(tokens[mod][category][0].url);
+								setCurrentToken(
+									tokens[e.target.value][c[0]][0].url,
+								);
 							}}
 						>
 							{mods.map((e) => (
@@ -63,6 +66,9 @@ export default function TokenSpawner() {
 							as="select"
 							onChange={(e) => {
 								setCategory(e.target.value);
+								setCurrentToken(
+									tokens[mod][e.target.value][0].url,
+								);
 							}}
 						>
 							{categories.map((e) => (
