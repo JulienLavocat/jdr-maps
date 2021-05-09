@@ -1,14 +1,10 @@
-import { nanoid } from "nanoid";
-import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { Button, Col, Container, Form, Navbar, Row } from "react-bootstrap";
-import { CurrentRoomCtx } from "../../pages/Room/index";
-import { Message, MessageSender } from "../../hooks/useChat";
-import * as Scroll from "react-scroll";
-import ScrollableFeed from "react-scrollable-feed";
-import "./chat.css";
-import MessageRenderer from "./MessageRenderer";
+import React, { useContext, useEffect } from "react";
 import { useRecoilValue } from "recoil";
-import { userIdState, characterName } from "../../utils/state";
+import { CurrentRoomCtx } from "../../pages/Room/index";
+import { characterName } from "../../utils/state";
+import "./chat.css";
+import MessagesRenderer from "./MessagesRenderer";
+import SendMessageBar from "./SendMessageBar";
 
 export default function ChatRoom({
 	channel,
@@ -35,99 +31,5 @@ export default function ChatRoom({
 			/>
 			<SendMessageBar sendMessage={sendMessage} />
 		</div>
-	);
-}
-
-function MessagesRenderer({
-	isReady,
-	channel,
-	messages,
-	users,
-}: {
-	channel: { name: string; id: string };
-	messages: Message[];
-	isReady: boolean;
-	users: Record<string, MessageSender>;
-}) {
-	const ref = useRef<ScrollableFeed>(null);
-	const senderId = useRecoilValue(userIdState);
-
-	const msgs = useMemo(() => {
-		return messages.map((msg) => (
-			<MessageRenderer
-				content={msg.content}
-				id={msg.id}
-				sender={msg.sender}
-				senderId={senderId}
-				users={users}
-			/>
-		));
-	}, [messages]);
-
-	useEffect(() => {
-		ref.current?.scrollToBottom();
-		return () => {};
-	}, []);
-
-	return (
-		<Row>
-			<Col>
-				<Container>
-					<div className="d-flex align-items-center justify-content-between">
-						<h3 className="text-center py-3 d-inline">
-							#{channel.name}
-						</h3>
-					</div>
-					<ScrollableFeed className="chat" ref={ref}>
-						{isReady ? (
-							msgs
-						) : (
-							<div className="text-center mt-5 pt-5">
-								<p className="lead text-center">
-									Fetching Messages...
-								</p>
-							</div>
-						)}
-					</ScrollableFeed>
-				</Container>
-			</Col>
-		</Row>
-	);
-}
-
-function SendMessageBar({
-	sendMessage,
-}: {
-	sendMessage: (content: string) => void;
-}) {
-	const [newMessage, setNewMessage] = useState("");
-	return (
-		<Navbar fixed="bottom">
-			<Container>
-				<Form
-					inline
-					className="w-100 d-flex justify-content-between align-items-center"
-					onSubmit={(e) => {
-						e.preventDefault();
-						sendMessage(newMessage);
-						setNewMessage("");
-					}}
-				>
-					<Form.Group style={{ flex: 1 }}>
-						<Form.Control
-							value={newMessage}
-							style={{ width: "100%" }}
-							required
-							type="text"
-							placeholder="Type Message here..."
-							onChange={(e) => setNewMessage(e.target.value)}
-						/>
-					</Form.Group>
-					<Button variant="primary" type="submit">
-						Send
-					</Button>
-				</Form>
-			</Container>
-		</Navbar>
 	);
 }

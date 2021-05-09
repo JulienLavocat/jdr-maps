@@ -1,24 +1,27 @@
 import React from "react";
 import { Message, MessageSender } from "../../hooks/useChat";
+import humanizeDuration from "humanize-duration";
 
 export default function MessageRenderer({
-	sender,
-	content,
-	id,
+	msg,
 	senderId,
 	users,
-}: Message & { senderId: string; users: Record<string, MessageSender> }) {
+}: {
+	msg: Message;
+	senderId: string;
+	users: Record<string, MessageSender>;
+}) {
 	const matchAllParams = /<([^>]+)\$\_\$([^>]+)>/g;
 
 	let gif: string | null = null;
 	let isUserMentionned = false;
-	for (const param of content.matchAll(matchAllParams)) {
+	for (const param of msg.content.matchAll(matchAllParams)) {
 		switch (param[1]) {
 			case "@":
 				if (param[2] === senderId) isUserMentionned = true;
 
-				content = replaceText(
-					content,
+				msg.content = replaceText(
+					msg.content,
 					param.index || 0,
 					users[param[2]]?.name || "Unknown",
 					param[2].length,
@@ -34,19 +37,22 @@ export default function MessageRenderer({
 				break;
 		}
 
-		content = content.replaceAll(matchAllParams, "");
+		msg.content = msg.content.replaceAll(matchAllParams, "");
 	}
 
 	return (
 		<div
 			className="list-group-item"
-			key={id}
+			key={msg.id}
 			style={{
 				backgroundColor: isUserMentionned ? "#fcf7c5" : undefined,
 			}}
 		>
-			<strong>{sender.name}</strong>
-			<p>{content}</p>
+			<p>
+				<strong>{msg.sender.name} </strong>
+				<small>{formatDate(msg.sentAt || 0)}</small>
+			</p>
+			<p>{msg.content}</p>
 			{gif ? (
 				<video autoPlay={true} loop={true}>
 					<source src={gif} type="video/mp4" />
@@ -55,6 +61,23 @@ export default function MessageRenderer({
 		</div>
 	);
 }
+
+function formatDate(dateValue: number) {
+	const date = new Date(dateValue);
+	const now = new Date();
+	if (
+		date.getMonth() === now.getMonth() &&
+		date.getFullYear() === date.getFullYear()
+	) {
+		if (date.getDate() === now.getDate())
+			return `— Aujourd’hui à ${date.getHours()}h${date.getMinutes()}`;
+		if (date.getDate() === now.getDate() - 1)
+			return `— Hier à ${date.getHours()}h${date.getMinutes()}`;
+	} else {
+		return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
+	}
+}
+
 function replaceText(
 	base: string,
 	start: number,
