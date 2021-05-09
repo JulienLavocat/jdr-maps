@@ -1,9 +1,9 @@
 import { nanoid } from "nanoid";
 import { atom } from "recoil";
 
-export const characterName = atom({
+export const characterName = atom<string | null>({
 	key: "character-name-state",
-	default: "",
+	default: null,
 });
 
 export const userIdState = atom({

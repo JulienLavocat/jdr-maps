@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Button,
 	Col,
@@ -16,6 +16,11 @@ export default function RoomChooser() {
 	const [room, setRoom] = useState(rooms[0]);
 	const [name, setName] = useRecoilState(characterName);
 
+	useEffect(() => {
+		if (!name) setName(localStorage.getItem("character-name"));
+		return () => {};
+	}, []);
+
 	const history = useHistory();
 
 	return (
@@ -25,6 +30,9 @@ export default function RoomChooser() {
 					<Col sm={6}>
 						<Form
 							onSubmit={(e) => {
+								if (name === null) return;
+
+								localStorage.setItem("character-name", name);
 								e.preventDefault();
 								history.push("/rooms/" + room);
 							}}
@@ -34,9 +42,9 @@ export default function RoomChooser() {
 									<Form.Control
 										as="select"
 										value={room}
-										onChange={(e) =>
-											setRoom(e.target.value)
-										}
+										onChange={(e) => {
+											setRoom(e.target.value);
+										}}
 									>
 										{rooms.map((e) => (
 											<option key={e} value={e}>
@@ -48,7 +56,7 @@ export default function RoomChooser() {
 								<Col sm={4}>
 									<FormControl
 										placeholder="Character name"
-										value={name}
+										value={name || ""}
 										required={true}
 										onChange={(e) =>
 											setName(e.target.value)
