@@ -19,7 +19,7 @@ export const CurrentRoomCtx = createContext<UseRoom>({
 	addMarker: () => {},
 	removeMarker: () => {},
 	addToken: () => {},
-	updateTokenPos: () => {},
+	updateToken: () => {},
 	removeToken: () => {},
 	mapUrl: "",
 	setMap: () => {},
