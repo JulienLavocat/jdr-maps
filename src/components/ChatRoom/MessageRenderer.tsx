@@ -40,6 +40,8 @@ export default function MessageRenderer({
 		msg.content = msg.content.replaceAll(matchAllParams, "");
 	}
 
+	console.log(!!gif, isUserMentionned);
+
 	return (
 		<div
 			className="list-group-item"
@@ -53,12 +55,18 @@ export default function MessageRenderer({
 				<small>{formatDate(msg.sentAt || 0)}</small>
 			</p>
 			<p>{msg.content}</p>
-			{gif ? (
-				<video autoPlay={true} loop={true}>
-					<source src={gif} type="video/mp4" />
-				</video>
-			) : null}
+			{gif ? <Gif src={gif} /> : null}
 		</div>
+	);
+}
+
+function Gif({ src }: { src: string }) {
+	console.log("Rendering gif,", src);
+
+	return (
+		<video autoPlay={true} loop={true}>
+			<source src={src} type="video/mp4" />
+		</video>
 	);
 }
 

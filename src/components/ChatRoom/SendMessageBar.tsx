@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button, Container, Form, Navbar } from "react-bootstrap";
+import { ChatRoomCtx } from "./index";
 
-export default function SendMessageBar({
-	sendMessage,
-}: {
-	sendMessage: (content: string) => void;
-}) {
+export default function SendMessageBar() {
+	const { sendMessage } = useContext(ChatRoomCtx);
 	const [newMessage, setNewMessage] = useState("");
 	return (
 		<Navbar fixed="bottom">

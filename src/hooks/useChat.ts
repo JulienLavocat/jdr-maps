@@ -22,6 +22,7 @@ export interface UseChat {
 		sender?: { name: string; id: string },
 	) => void;
 	users: Record<string, MessageSender>;
+	clearMessages: () => void;
 }
 
 export const useChat: (
@@ -63,8 +64,12 @@ export const useChat: (
 
 		socket.current?.on("new_message", (channelId, messages: Message[]) => {
 			if (channelId !== id) return;
-			console.log(messages);
 			setMessages(() => messages);
+		});
+
+		socket.current?.on("clear_messages", (channelId) => {
+			if (channelId !== id) return;
+			setMessages(() => []);
 		});
 
 		return () => {};
@@ -83,6 +88,7 @@ export const useChat: (
 				},
 			});
 		},
+		clearMessages: () => socket.current?.emit("clear_messages", id),
 		users,
 	};
 };
