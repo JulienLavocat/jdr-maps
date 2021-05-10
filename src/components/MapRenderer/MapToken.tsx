@@ -39,6 +39,8 @@ export default function MapToken({
 					case "r":
 						const newRotation = rotationAngle + 45;
 						//setRotation(newRotation);
+						console.log(id, pos, newRotation);
+
 						updateToken(id, pos, newRotation);
 						break;
 
@@ -50,11 +52,13 @@ export default function MapToken({
 				const marker = markerRef.current;
 				if (marker != null) {
 					const pos = marker.getLatLng();
+
+					console.log(id, pos, rotationAngle);
 					updateToken(id, pos, rotationAngle);
 				}
 			},
 		}),
-		[rotationAngle],
+		[rotationAngle, pos],
 	);
 
 	return (
