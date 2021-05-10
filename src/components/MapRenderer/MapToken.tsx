@@ -26,7 +26,7 @@ export default function MapToken({
 	size: number;
 	rotationAngle: number;
 }) {
-	const { updateToken, removeToken } = useContext(CurrentRoomCtx);
+	const { updateToken, removeToken, addToken } = useContext(CurrentRoomCtx);
 	const markerRef = useRef<LeafletRotatedMaker>(null);
 	const eventHandlers = useMemo<LeafletEventHandlerFnMap>(
 		() => ({
@@ -47,6 +47,9 @@ export default function MapToken({
 					default:
 						break;
 				}
+			},
+			dblclick() {
+				addToken(pos, img);
 			},
 			dragend() {
 				const marker = markerRef.current;
