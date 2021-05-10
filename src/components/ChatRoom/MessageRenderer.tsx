@@ -1,6 +1,5 @@
 import React from "react";
 import { Message, MessageSender } from "../../hooks/useChat";
-import humanizeDuration from "humanize-duration";
 
 export default function MessageRenderer({
 	msg,
@@ -11,21 +10,23 @@ export default function MessageRenderer({
 	senderId: string;
 	users: Record<string, MessageSender>;
 }) {
-	const matchAllParams = /<([^>]+)\$\_\$([^>]+)>/g;
+	const matchAllParams = new RegExp("<([^>]+)\\$\\_\\$([^>]+)>", "g");
 
 	let gif: string | null = null;
 	let isUserMentionned = false;
+	let renderedContent = msg.content;
+
 	for (const param of msg.content.matchAll(matchAllParams)) {
 		switch (param[1]) {
 			case "@":
 				if (param[2] === senderId) isUserMentionned = true;
 
-				msg.content = replaceText(
-					msg.content,
+				renderedContent = replaceText(
+					renderedContent,
 					param.index || 0,
 					users[param[2]]?.name || "Unknown",
 					param[2].length,
-					6, // <> + delimiter
+					6, // <> + delimiter (3)
 				);
 
 				break;
@@ -37,10 +38,8 @@ export default function MessageRenderer({
 				break;
 		}
 
-		msg.content = msg.content.replaceAll(matchAllParams, "");
+		renderedContent = renderedContent.replaceAll(matchAllParams, "");
 	}
-
-	console.log(!!gif, isUserMentionned);
 
 	return (
 		<div
@@ -54,15 +53,13 @@ export default function MessageRenderer({
 				<strong>{msg.sender.name} </strong>
 				<small>{formatDate(msg.sentAt || 0)}</small>
 			</p>
-			<p>{msg.content}</p>
+			<p>{renderedContent}</p>
 			{gif ? <Gif src={gif} /> : null}
 		</div>
 	);
 }
 
 function Gif({ src }: { src: string }) {
-	console.log("Rendering gif,", src);
-
 	return (
 		<video autoPlay={true} loop={true}>
 			<source src={src} type="video/mp4" />
