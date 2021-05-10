@@ -2521,6 +2521,11 @@ koa@^2.13.0:
     type-is "^1.6.16"
     vary "^1.1.2"
 
+leaflet-marker-rotation@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/leaflet-marker-rotation/-/leaflet-marker-rotation-0.3.0.tgz#9541836c3f9a60e3f95329295e58e1575b3d39a0"
+  integrity sha512-vzmwpH9jWd6Fc36Wp7eOavprE3rtG3/olu/cdPVPRe8uB6ZfdPUOClu1iirS5z5tMwkSbyduBwdAcZqxn5QT1Q==
+
 leaflet@^1.7.1:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.7.1.tgz#10d684916edfe1bf41d688a3b97127c0322a2a19"

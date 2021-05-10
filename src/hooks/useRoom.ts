@@ -20,6 +20,7 @@ export interface TokenData {
 	ownerId: string;
 	imgUrl: string;
 	size: number;
+	rotation: number;
 }
 
 export interface UseRoom {
@@ -28,7 +29,11 @@ export interface UseRoom {
 	markers: MarkerData[];
 	tokens: TokenData[];
 	addToken: (pos: LatLngExpression, imgUrl: string) => void;
-	updateTokenPos: (tokenId: string, pos: LatLngExpression) => void;
+	updateToken: (
+		tokenId: string,
+		pos: LatLngExpression,
+		rotation: number,
+	) => void;
 	removeToken: (id: string) => void;
 	addMarker: (pos: LatLngExpression) => void;
 	removeMarker: (id: string) => void;
@@ -102,8 +107,12 @@ export const useRoom: (roomId: string, events: RoomEventsMap) => UseRoom = (
 		socketRef.current?.emit("add_token", roomId, pos, imgUrl);
 	};
 
-	const updateTokenPos = (tokenId: string, pos: LatLngExpression) => {
-		socketRef.current?.emit("update_token_pos", roomId, tokenId, pos);
+	const updateToken = (
+		tokenId: string,
+		pos: LatLngExpression,
+		rotation: number,
+	) => {
+		socketRef.current?.emit("update_token", roomId, tokenId, pos, rotation);
 	};
 
 	const removeToken = (id: string) => {
@@ -130,7 +139,7 @@ export const useRoom: (roomId: string, events: RoomEventsMap) => UseRoom = (
 		addMarker,
 		removeMarker,
 		addToken,
-		updateTokenPos,
+		updateToken,
 		removeToken,
 		setMap,
 		chats,

@@ -14,7 +14,6 @@ import MapsAPI from "../../utils/MapsAPI";
 
 export default function MapRenderer() {
 	const { markers, tokens, mapUrl } = useContext(CurrentRoomCtx);
-	const [showMapSelector, setShowMapSelector] = useState(false);
 	return (
 		<div>
 			<MapContainer
@@ -32,12 +31,15 @@ export default function MapRenderer() {
 					<MapPin color={e.color} id={e.id} pos={e.pos} key={e.id} />
 				))}
 				{tokens.map((e) => {
+					console.log(e);
+
 					return (
 						<MapToken
 							id={e.id}
 							img={e.imgUrl}
 							pos={e.pos}
 							size={e.size}
+							rotationAngle={e.rotation}
 							key={e.id}
 						/>
 					);

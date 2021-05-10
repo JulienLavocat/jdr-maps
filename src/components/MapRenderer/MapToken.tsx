@@ -4,53 +4,71 @@ import {
 	LeafletEventHandlerFnMap,
 	Marker as LeafletMarker,
 } from "leaflet";
-import { MarkerData } from "../../hooks/useRoom";
+import { MarkerData, TokenData } from "../../hooks/useRoom";
 import { Marker, Popup } from "react-leaflet";
 import { useRef } from "react";
-import { LatLngExpression } from "leaflet";
+import L, { LatLngExpression } from "leaflet";
 import { CurrentRoomCtx } from "../../pages/Room/index";
+import "./rotation.css";
+import { RotatedMarker } from "./RotatedMarker";
+import { RotatedMarker as LeafletRotatedMaker } from "leaflet-marker-rotation";
 
 export default function MapToken({
 	pos,
 	id,
 	img,
 	size,
+	rotationAngle,
 }: {
-	img: string;
 	pos: LatLngExpression;
 	id: string;
+	img: string;
 	size: number;
+	rotationAngle: number;
 }) {
-	const { updateTokenPos, removeToken } = useContext(CurrentRoomCtx);
-	const markerRef = useRef<LeafletMarker>(null);
+	const { updateToken, removeToken } = useContext(CurrentRoomCtx);
+	const markerRef = useRef<LeafletRotatedMaker>(null);
 	const eventHandlers = useMemo<LeafletEventHandlerFnMap>(
 		() => ({
 			keyup(e) {
-				if (e.originalEvent.key !== "Backspace") return;
-				removeToken(id);
+				switch (e.originalEvent.key) {
+					case "Backspace":
+						removeToken(id);
+						break;
+
+					case "r":
+						const newRotation = rotationAngle + 45;
+						//setRotation(newRotation);
+						updateToken(id, pos, newRotation);
+						break;
+
+					default:
+						break;
+				}
 			},
 			dragend() {
 				const marker = markerRef.current;
 				if (marker != null) {
 					const pos = marker.getLatLng();
-					updateTokenPos(id, pos);
+					updateToken(id, pos, rotationAngle);
 				}
 			},
 		}),
-		[],
+		[rotationAngle],
 	);
 
 	return (
-		<Marker
+		<RotatedMarker
 			draggable={true}
 			eventHandlers={eventHandlers}
 			position={pos}
-			key={id}
 			ref={markerRef}
 			icon={makeMarkerIcon("/tokens" + img, size)}
+			rotationAngle={rotationAngle}
+			rotationOrigin="center"
 		>
 			{/* <Popup>Character token</Popup> */}
-		</Marker>
+		</RotatedMarker>
 	);
 }
 
