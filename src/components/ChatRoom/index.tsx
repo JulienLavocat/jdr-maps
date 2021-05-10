@@ -25,7 +25,6 @@ export default function ChatRoom({
 }: {
 	channel: { name: string; id: string };
 }) {
-	const name = useRecoilValue(characterName);
 	const chatRoom = useContext(CurrentRoomCtx).useChat(channel.id);
 
 	useEffect(() => {
@@ -35,10 +34,10 @@ export default function ChatRoom({
 
 	return (
 		<ChatRoomCtx.Provider value={chatRoom}>
-			<div className="bg-light page" style={{ overflowX: "hidden" }}>
+			<Container fluid className="bg-light page">
 				<MessagesRenderer channel={channel} />
 				<SendMessageBar />
-			</div>
+			</Container>
 		</ChatRoomCtx.Provider>
 	);
 }

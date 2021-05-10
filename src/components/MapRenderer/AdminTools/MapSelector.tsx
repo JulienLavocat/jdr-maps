@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import MapsAPI from "../../../utils/MapsAPI";
 import { CurrentRoomCtx } from "../../../pages/Room/index";
-import { Form } from "react-bootstrap";
+import { Container, Form } from "react-bootstrap";
 
 const API = "/api";
 
@@ -18,7 +18,7 @@ export default function MapSelector() {
 	}, []);
 
 	return (
-		<div>
+		<Container fluid>
 			<Form.Control as="select" onChange={(e) => setMap(e.target.value)}>
 				{maps.map((e) => (
 					<option key={e} value={e}>
@@ -26,6 +26,6 @@ export default function MapSelector() {
 					</option>
 				))}
 			</Form.Control>
-		</div>
+		</Container>
 	);
 }
