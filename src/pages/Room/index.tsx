@@ -1,16 +1,15 @@
-import { LatLngExpression } from "leaflet";
-import React, { createContext, useState } from "react";
-import "./Room.css";
-import MapRenderer from "../../components/MapRenderer";
-import { useRoom, UseRoom } from "../../hooks/useRoom";
-import { useParams } from "react-router";
+import React, { createContext } from "react";
 import { Tab, Tabs } from "react-bootstrap";
-import TokenSpawner from "../../components/MapRenderer/AdminTools/TokenSpawner";
-import MapSelector from "../../components/MapRenderer/AdminTools/MapSelector";
+import { useParams } from "react-router";
 import ChatRoom from "../../components/ChatRoom";
+import MapRenderer from "../../components/MapRenderer";
+import MapSelector from "../../components/MapRenderer/AdminTools/MapSelector";
+import TokenSpawner from "../../components/MapRenderer/AdminTools/TokenSpawner";
+import { useRoom, UseRoom } from "../../hooks/useRoom";
+import "./Room.css";
 import { useRecoilValue } from "recoil";
 import { characterName } from "../../utils/state";
-import { useMap } from "react-leaflet";
+import RoomUsers from "../../components/RoomUsers/index";
 
 export const CurrentRoomCtx = createContext<UseRoom>({
 	color: "black",
@@ -32,13 +31,14 @@ export const CurrentRoomCtx = createContext<UseRoom>({
 		users: {},
 		clearMessages: () => {},
 	}),
+	users: {},
 	flyTo: () => {},
 	on: () => {},
 });
 
 function App() {
 	const { roomId } = useParams<{ roomId: string }>();
-	const room = useRoom(roomId, {});
+	const room = useRoom(roomId, useRecoilValue(characterName) || "");
 
 	return (
 		<div>
@@ -52,6 +52,9 @@ function App() {
 					</Tab>
 					<Tab eventKey="changeMap" title="Changer de map">
 						<MapSelector />
+					</Tab>
+					<Tab eventKey="users" title="Users">
+						<RoomUsers />
 					</Tab>
 					{room.chats.map((e) => (
 						<Tab

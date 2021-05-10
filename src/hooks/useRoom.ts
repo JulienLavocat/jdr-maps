@@ -41,18 +41,26 @@ export interface UseRoom {
 	flyTo: (pos: LatLngExpression, zoom: number) => void;
 	chats: { name: string; id: string }[];
 	useChat: (channelId: string) => UseChat;
+	users: Record<string, UserInfos>;
 	on: (event: string, handler: (...args: any[]) => void) => void;
 }
 
 export type RoomEventsMap = Record<string, (...args: any[]) => void>;
+export interface UserInfos {
+	id: string;
+	name: string;
+	color: string;
+}
 
-export const useRoom: (roomId: string, events: RoomEventsMap) => UseRoom = (
+export const useRoom: (roomId: string, name: string) => UseRoom = (
 	roomId: string,
+	name: string,
 ) => {
 	const [chats, setChats] = useState<{ name: string; id: string }[]>([]);
 	const [markers, setMarkers] = useState<MarkerData[]>([]);
 	const [tokens, setTokens] = useState<TokenData[]>([]);
 	const [mapUrl, setMapUrl] = useState<string>("");
+	const [users, setUsers] = useState<Record<string, UserInfos>>({});
 	const socketRef = useRef<Socket>();
 	const [color, setColor] = useState<string>("black");
 	const [userId] = useRecoilState<string>(userIdState);
@@ -61,7 +69,7 @@ export const useRoom: (roomId: string, events: RoomEventsMap) => UseRoom = (
 		// Creates a WebSocket connection
 		socketRef.current = socketIO(SOCKET_SERVER_URL, {
 			transports: ["websocket"],
-			query: { roomId, userId },
+			query: { roomId, userId, name },
 		});
 
 		socketRef.current.on("connect", () => {
@@ -76,6 +84,7 @@ export const useRoom: (roomId: string, events: RoomEventsMap) => UseRoom = (
 			setTokens(Object.values(data.tokens));
 			setMapUrl(data.mapUrl);
 			setChats(data.chats);
+			setUsers(data.users);
 		});
 
 		socketRef.current.on("markers_updated", (markers) => {
@@ -146,5 +155,6 @@ export const useRoom: (roomId: string, events: RoomEventsMap) => UseRoom = (
 		flyTo,
 		useChat: (channelId: string) => useChat(socketRef, channelId),
 		on,
+		users,
 	};
 };

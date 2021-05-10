@@ -10,7 +10,6 @@ export default function MapSelector() {
 	const { setMap } = useContext(CurrentRoomCtx);
 	const [maps, setMaps] = useState<string[] | null>(null);
 	const [currentMap, setCurrentMap] = useState<string | null>(null);
-	console.log(currentMap);
 
 	useEffect(() => {
 		MapsAPI.getMaps()
