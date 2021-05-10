@@ -2164,11 +2164,6 @@ human-signals@^2.1.0:
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-2.1.0.tgz#dc91fcba42e4d06e4abaed33b3e7a3c02f514ea0"
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
-humanize-duration@^3.26.0:
-  version "3.26.0"
-  resolved "https://registry.yarnpkg.com/humanize-duration/-/humanize-duration-3.26.0.tgz#4d77f6b3d2fe0ca1ff14623ccc2b2f8b48ab1aaf"
-  integrity sha512-SddekX3p5ApvPY6bbAYppGKe874jP6iFZXYtrQToDV4R0j2UpTYPqwTFM2QpXpuw9DhS/eXTUnKYTF9TbXAJ6A==
-
 humanize-ms@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/humanize-ms/-/humanize-ms-1.2.1.tgz#c46e3159a293f6b896da29316d8b6fe8bb79bbed"
@@ -3285,6 +3280,11 @@ react-icons@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.2.0.tgz#6dda80c8a8f338ff96a1851424d63083282630d0"
   integrity sha512-rmzEDFt+AVXRzD7zDE21gcxyBizD/3NqjbX6cmViAgdqfJ2UiLer8927/QhhrXQV7dEj/1EGuOTPp7JnLYVJKQ==
+
+react-intersection-observer@^8.31.1:
+  version "8.31.1"
+  resolved "https://registry.yarnpkg.com/react-intersection-observer/-/react-intersection-observer-8.31.1.tgz#dea4e9a10bbfc899c4159eadd94354cc083920b5"
+  integrity sha512-Q4OH2aUXcEi6tPBBgOBjfodoRM68wikXqqbPf8FaY4VBMcSACbxulfkW/OqcfLYfSAOEPGvxN+NCn9PqBgAOfQ==
 
 react-is@^16.3.2, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"

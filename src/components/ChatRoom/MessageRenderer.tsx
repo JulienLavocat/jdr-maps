@@ -1,4 +1,5 @@
 import React from "react";
+import { useInView } from "react-intersection-observer";
 import { Message, MessageSender } from "../../hooks/useChat";
 
 export default function MessageRenderer({
@@ -60,8 +61,14 @@ export default function MessageRenderer({
 }
 
 function Gif({ src }: { src: string }) {
+	const { ref, inView, entry } = useInView();
+	if (entry)
+		entry.isIntersecting
+			? (entry.target as HTMLVideoElement).play()
+			: (entry.target as HTMLVideoElement).play();
+
 	return (
-		<video autoPlay={true} loop={true}>
+		<video autoPlay={inView} loop={inView} ref={ref}>
 			<source src={src} type="video/mp4" />
 		</video>
 	);

@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\yarn\bin\yarn.js add @types/humanize-duration --dev
+  C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\yarn\bin\yarn.js add react-intersection-observer
 
 PATH: 
   C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\julie\bin;C:\Program Files\Oculus\Support\oculus-runtime;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;C:\Program Files\Git\cmd;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Users\julie\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\julie\AppData\Local\Microsoft\WindowsApps;C:\Users\julie\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\julie\Dev\PathSoftwares;C:\Program Files\MongoDB\Tools\100\bin;C:\Users\julie\AppData\Roaming\nvm;C:\Program Files\nodejs
@@ -30,7 +30,6 @@ npm manifest:
       "@types/react-router-dom": "^5.1.7",
       "axios": "^0.21.1",
       "bootstrap": "^5.0.0",
-      "humanize-duration": "^3.26.0",
       "leaflet": "^1.7.1",
       "msg": "^1.0.0",
       "nanoid": "^3.1.22",
@@ -53,6 +52,7 @@ npm manifest:
       "@snowpack/web-test-runner-plugin": "^0.2.2",
       "@testing-library/react": "^11.2.6",
       "@types/chai": "^4.2.17",
+      "@types/humanize-duration": "^3.18.1",
       "@types/mocha": "^8.2.2",
       "@types/react": "^17.0.4",
       "@types/react-dom": "^17.0.3",
