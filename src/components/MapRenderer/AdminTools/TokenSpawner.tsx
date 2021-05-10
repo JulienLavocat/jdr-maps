@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { CurrentRoomCtx } from "../../../pages/Room/index";
-import tokensIndex from "../tokens2.json";
+import tokensIndex from "../tokens.json";
 import { Form, Row, Col, InputGroup, Button } from "react-bootstrap";
 
 type TokenIndex = Record<
@@ -15,15 +15,15 @@ const mods: string[] = Object.keys(tokens);
 
 export default function TokenSpawner() {
 	const { addToken } = useContext(CurrentRoomCtx);
+
 	const [mod, setMod] = useState(mods[0]);
 	const [categories, setCategories] = useState<string[]>(
 		Object.keys(tokens[mod]),
 	);
-	const [category, setCategory] = useState<string>(
-		Object.keys(tokens[mod])[0],
+	const [category, setCategory] = useState<string>(categories[0]);
+	const [currentToken, setCurrentToken] = useState<string | null>(
+		tokens[mod][category][0].url,
 	);
-	const [currentToken, setCurrentToken] = useState<string | null>(null);
-	console.log(mod, category, currentToken);
 
 	return (
 		<Form>

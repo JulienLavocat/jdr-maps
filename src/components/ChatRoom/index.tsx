@@ -9,6 +9,7 @@ import { characterName, userIdState } from "../../utils/state";
 import "./chat.css";
 import MessageRenderer from "./MessageRenderer";
 import SendMessageBar from "./SendMessageBar";
+import MessagesRenderer from "./MessagesRenderer";
 
 export const ChatRoomCtx = createContext<UseChat>({
 	sendMessage: () => {},
@@ -42,7 +43,7 @@ export default function ChatRoom({
 	);
 }
 
-function MessagesRenderer({
+function MessagesRendererOld({
 	channel,
 }: {
 	channel: { name: string; id: string };

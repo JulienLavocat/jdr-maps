@@ -30,6 +30,7 @@ export const CurrentRoomCtx = createContext<UseRoom>({
 		isReady: false,
 		sendMessage: () => {},
 		users: {},
+		clearMessages: () => {},
 	}),
 	flyTo: () => {},
 	on: () => {},
