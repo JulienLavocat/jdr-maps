@@ -13,7 +13,9 @@ import MapToken from "./MapToken";
 import MapsAPI from "../../utils/MapsAPI";
 
 export default function MapRenderer() {
-	const { markers, tokens, mapUrl } = useContext(CurrentRoomCtx);
+	const { markers, tokens, maps, currentMap } = useContext(CurrentRoomCtx);
+	console.log(maps, currentMap);
+
 	return (
 		<div>
 			<MapContainer
@@ -23,10 +25,13 @@ export default function MapRenderer() {
 				doubleClickZoom={false}
 				attributionControl={false}
 			>
-				<ImageOverlay
-					bounds={new LatLngBounds([0, 0], [1000, 1000])}
-					url={MapsAPI.getMapUrl(mapUrl)}
-				/>
+				{maps[currentMap] ? (
+					<ImageOverlay
+						bounds={new LatLngBounds([0, 0], [1000, 1000])}
+						url={MapsAPI.getMapUrl(maps[currentMap].name)}
+					/>
+				) : null}
+
 				{markers.map((e) => (
 					<MapPin color={e.color} id={e.id} pos={e.pos} key={e.id} />
 				))}

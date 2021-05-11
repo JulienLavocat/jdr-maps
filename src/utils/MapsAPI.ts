@@ -14,6 +14,7 @@ export interface MapData {
 	name: string;
 	date: string;
 	url: string;
+	id: string;
 }
 
 export default class MapsAPI {
@@ -25,7 +26,7 @@ export default class MapsAPI {
 		return `${S3}/${map}`;
 	}
 
-	static uploadMap(
+	static async uploadMap(
 		file: File,
 		name: string,
 		universe: string,
@@ -36,17 +37,17 @@ export default class MapsAPI {
 		formData.append("universe", universe);
 		formData.append("file", file); // File must be at the end of body
 
-		return http
-			.post("/maps", formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
-				onUploadProgress,
-			})
-			.then((r) => r.data);
+		const r = await http.post("/maps", formData, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+			onUploadProgress,
+		});
+		return r.data;
 	}
 
-	static deleteMap(map: string): Promise<MapData[]> {
-		return http.delete("/maps/" + map).then((r) => r.data);
+	static async deleteMap(map: string): Promise<MapData[]> {
+		const r = await http.delete("/maps/" + map);
+		return r.data;
 	}
 }

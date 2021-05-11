@@ -4,6 +4,7 @@ import { useSetRecoilState, useRecoilState } from "recoil";
 import socketIO, { Socket } from "socket.io-client";
 import { useChat, UseChat, MessageSender } from "./useChat";
 import { userIdState } from "../utils/state";
+import { MapData } from "../utils/MapsAPI";
 
 const SOCKET_SERVER_URL = import.meta.env.SNOWPACK_PUBLIC_API_URL || "/api";
 
@@ -25,7 +26,6 @@ export interface TokenData {
 
 export interface UseRoom {
 	color: string;
-	mapUrl: string;
 	markers: MarkerData[];
 	tokens: TokenData[];
 	addToken: (pos: LatLngExpression, imgUrl: string) => void;
@@ -37,7 +37,10 @@ export interface UseRoom {
 	removeToken: (id: string) => void;
 	addMarker: (pos: LatLngExpression) => void;
 	removeMarker: (id: string) => void;
-	setMap: (mapUrl: string) => void;
+	currentMap: number;
+	maps: MapData[];
+	setCurrentMap: (map: number) => void;
+	setMaps: (maps: MapData[]) => void;
 	flyTo: (pos: LatLngExpression, zoom: number) => void;
 	chats: { name: string; id: string }[];
 	useChat: (channelId: string) => UseChat;
@@ -59,7 +62,8 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 	const [chats, setChats] = useState<{ name: string; id: string }[]>([]);
 	const [markers, setMarkers] = useState<MarkerData[]>([]);
 	const [tokens, setTokens] = useState<TokenData[]>([]);
-	const [mapUrl, setMapUrl] = useState<string>("");
+	const [currentMap, setCurrentMap] = useState(0);
+	const [maps, setMaps] = useState<MapData[]>([]);
 	const [users, setUsers] = useState<Record<string, UserInfos>>({});
 	const socketRef = useRef<Socket>();
 	const [color, setColor] = useState<string>("black");
@@ -82,7 +86,8 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 			if (userId === data.id) setColor(data.color);
 			setMarkers(Object.values(data.markers));
 			setTokens(Object.values(data.tokens));
-			setMapUrl(data.mapUrl);
+			setMaps(data.map.maps);
+			setCurrentMap(data.map.current);
 			setChats(data.chats);
 			setUsers(data.users);
 		});
@@ -95,8 +100,12 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 			setTokens(() => Object.values(tokens));
 		});
 
-		socketRef.current.on("set_map", (mapUrl: string) => {
-			setMapUrl(() => mapUrl);
+		socketRef.current.on("set_current_map", (map: number) => {
+			setCurrentMap(() => map);
+		});
+
+		socketRef.current.on("set_maps", (maps: MapData[]) => {
+			setMaps(() => maps);
 		});
 
 		return () => {
@@ -141,7 +150,6 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 	};
 
 	return {
-		mapUrl,
 		color,
 		markers,
 		tokens,
@@ -156,5 +164,11 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 		useChat: (channelId: string) => useChat(socketRef, channelId),
 		on,
 		users,
+		currentMap,
+		maps,
+		setCurrentMap: (map: number) =>
+			socketRef.current?.emit("set_current_map", roomId, map),
+		setMaps: (maps: MapData[]) =>
+			socketRef.current?.emit("set_maps", roomId, maps),
 	};
 };

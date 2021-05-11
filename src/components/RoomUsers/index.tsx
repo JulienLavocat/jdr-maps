@@ -10,13 +10,15 @@ export default function RoomUsers() {
 		<Container fluid>
 			<Table striped bordered hover>
 				<thead>
-					<th>Name</th>
-					<th>Color</th>
-					<th>Id</th>
+					<tr>
+						<th>Name</th>
+						<th>Color</th>
+						<th>Id</th>
+					</tr>
 				</thead>
 				<tbody>
 					{Object.values(users).map((e) => (
-						<User user={e} />
+						<User user={e} key={e.id} />
 					))}
 				</tbody>
 			</Table>
