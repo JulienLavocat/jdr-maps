@@ -20,8 +20,10 @@ export const CurrentRoomCtx = createContext<UseRoom>({
 	addToken: () => {},
 	updateToken: () => {},
 	removeToken: () => {},
-	mapUrl: "",
-	setMap: () => {},
+	maps: [],
+	currentMap: 0,
+	setCurrentMap: () => {},
+	setMaps: () => {},
 	chats: [],
 	useChat: () => ({
 		initialize: () => {},
