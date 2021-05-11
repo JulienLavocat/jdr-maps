@@ -3,6 +3,7 @@ import React, { useContext, useRef, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import {
 	ImageOverlay,
+	LayersControl,
 	MapContainer,
 	useMap,
 	useMapEvents,
@@ -14,7 +15,7 @@ import MapsAPI from "../../utils/MapsAPI";
 
 export default function MapRenderer() {
 	const { markers, tokens, maps, currentMap } = useContext(CurrentRoomCtx);
-	console.log(maps, currentMap);
+	//console.log("Current map", maps[currentMap].name);
 
 	return (
 		<div>
@@ -25,12 +26,27 @@ export default function MapRenderer() {
 				doubleClickZoom={false}
 				attributionControl={false}
 			>
-				{maps[currentMap] ? (
-					<ImageOverlay
-						bounds={new LatLngBounds([0, 0], [1000, 1000])}
-						url={MapsAPI.getMapUrl(maps[currentMap].name)}
-					/>
-				) : null}
+				<LayersControl position="bottomright">
+					{maps.map((e, index) => {
+						const isChecked = index === currentMap;
+						console.log(e.name, isChecked);
+
+						return e ? (
+							<LayersControl.BaseLayer
+								key={e.name}
+								checked={isChecked}
+								name={e.name}
+							>
+								<ImageOverlay
+									bounds={
+										new LatLngBounds([0, 0], [1000, 1000])
+									}
+									url={MapsAPI.getMapUrl(e.name)}
+								/>
+							</LayersControl.BaseLayer>
+						) : null;
+					})}
+				</LayersControl>
 
 				{markers.map((e) => (
 					<MapPin color={e.color} id={e.id} pos={e.pos} key={e.id} />
