@@ -1,8 +1,19 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 
-import "bootstrap/dist/css/bootstrap.min.css";
 import MapsAPI from "../../utils/MapsAPI";
 import { MapData } from "../../utils/MapsAPI";
+import {
+	Alert,
+	Button,
+	Card,
+	InputGroup,
+	ListGroup,
+	ListGroupItem,
+	ProgressBar,
+} from "react-bootstrap";
+import { FaTrashAlt } from "react-icons/fa";
+
+import "./mapUploader.css";
 
 export default function MapUploader() {
 	return (
@@ -13,10 +24,12 @@ export default function MapUploader() {
 }
 
 function UploadFiles() {
+	const [currentFile, setCurrentFile] = useState<File | null>(null);
 	const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
 	const [progress, setProgress] = useState(0);
 	const [message, setMessage] = useState("");
 	const [fileInfos, setFileInfos] = useState<MapData[]>([]);
+	const [uploading, setUploading] = useState(false);
 
 	useEffect(() => {
 		MapsAPI.getMaps().then((r) => {
@@ -26,12 +39,12 @@ function UploadFiles() {
 	}, []);
 
 	const upload = async () => {
-		if (!selectedFiles) return;
+		if (!currentFile) return;
 		setProgress(0);
-
+		setUploading(true);
 		try {
 			const res = await MapsAPI.uploadMap(
-				selectedFiles[0],
+				currentFile,
 				"testMap.png",
 				"jdr",
 				(progress) =>
@@ -40,71 +53,84 @@ function UploadFiles() {
 					),
 			);
 
-			console.log(res);
-
-			setProgress(0);
 			setMessage(res.message);
 			setFileInfos(res.maps);
 		} catch (error) {
-			setProgress(0);
 			setMessage("Could not upload the file ! " + error.message);
 		}
 
+		setUploading(false);
 		setSelectedFiles(null);
+		setCurrentFile(null);
+		setProgress(0);
 	};
 
 	return (
 		<div>
-			{selectedFiles && selectedFiles[0] && (
-				<div className="progress">
-					<div
-						className="progress-bar progress-bar-info progress-bar-striped"
-						role="progressbar"
-						aria-valuenow={progress}
-						aria-valuemin={0}
-						aria-valuemax={100}
-						style={{ width: progress + "%" }}
-					>
-						{progress}%
-					</div>
-				</div>
+			{uploading && (
+				<ProgressBar
+					now={progress}
+					variant="info"
+					striped
+					min={0}
+					max={100}
+					label={`${progress}%`}
+				></ProgressBar>
 			)}
 
-			<label className="btn btn-default">
-				<input
-					type="file"
-					onChange={(e) => setSelectedFiles(e.target.files)}
-				/>
-			</label>
+			<InputGroup>
+				<label className="btn btn-default">
+					<input
+						type="file"
+						onChange={(e) => {
+							setSelectedFiles(e.target.files);
 
-			<button
-				className="btn btn-success"
-				disabled={!selectedFiles}
-				onClick={upload}
-			>
-				Upload
-			</button>
+							if (e.target.files)
+								setCurrentFile(e.target.files[0] || null);
+						}}
+					/>
+				</label>
+				<InputGroup.Append>
+					<button
+						className="btn btn-success"
+						disabled={!currentFile}
+						onClick={upload}
+					>
+						Upload
+					</button>
+				</InputGroup.Append>
+			</InputGroup>
 
-			<div className="alert alert-light" role="alert">
-				{message}
-			</div>
+			<Alert variant="light">{message}</Alert>
 
-			<div className="card">
-				<div className="card-header">List of Files</div>
-				<ul className="list-group list-group-flush">
-					{fileInfos ? (
-						fileInfos.map((file, index) => (
-							<li className="list-group-item" key={index}>
-								<a href={file.url}>{file.name}</a>
-							</li>
-						))
-					) : (
-						<div className="spinner-border" role="status">
-							<span className="sr-only">Loading...</span>
-						</div>
-					)}
-				</ul>
-			</div>
+			<Card>
+				<Card.Header>List of Files</Card.Header>
+				{fileInfos ? (
+					<ListGroup variant="flush">
+						{fileInfos.map((file) => (
+							<ListGroupItem key={file.name}>
+								<a href={file.url} className="no-decorations">
+									{file.name}
+								</a>
+								&nbsp; &nbsp;
+								<FaTrashAlt
+									onClick={async () => {
+										const maps = await MapsAPI.deleteMap(
+											file.name,
+										);
+
+										setFileInfos(maps);
+									}}
+								/>
+							</ListGroupItem>
+						))}
+					</ListGroup>
+				) : (
+					<div className="spinner-border" role="status">
+						<span className="sr-only">Loading...</span>
+					</div>
+				)}
+			</Card>
 		</div>
 	);
 }

@@ -45,4 +45,8 @@ export default class MapsAPI {
 			})
 			.then((r) => r.data);
 	}
+
+	static deleteMap(map: string): Promise<MapData[]> {
+		return http.delete("/maps/" + map).then((r) => r.data);
+	}
 }
