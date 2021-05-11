@@ -3,8 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import { useSetRecoilState, useRecoilState } from "recoil";
 import socketIO, { Socket } from "socket.io-client";
 import { useChat, UseChat, MessageSender } from "./useChat";
-import { userIdState } from "../utils/state";
+import { userIdState, inAppNotifications, characterName } from "../utils/state";
 import { MapData } from "../utils/MapsAPI";
+import { nanoid } from "nanoid";
 
 const SOCKET_SERVER_URL = import.meta.env.SNOWPACK_PUBLIC_API_URL || "/api";
 
@@ -68,6 +69,7 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 	const socketRef = useRef<Socket>();
 	const [color, setColor] = useState<string>("black");
 	const [userId] = useRecoilState<string>(userIdState);
+	const setIAPS = useSetRecoilState(inAppNotifications);
 
 	useEffect(() => {
 		// Creates a WebSocket connection
@@ -90,6 +92,17 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 			setCurrentMap(data.map.current);
 			setChats(data.chats);
 			setUsers(data.users);
+
+			setIAPS((old) => [
+				...old,
+				{
+					body: data.users[data.id].name,
+					duration: 4000,
+					id: nanoid(),
+					sentAt: new Date(),
+					title: "Room joined",
+				},
+			]);
 		});
 
 		socketRef.current.on("markers_updated", (markers) => {

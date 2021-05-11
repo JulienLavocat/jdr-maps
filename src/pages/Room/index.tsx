@@ -10,6 +10,7 @@ import "./Room.css";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { characterName, chatUnreadsState } from "../../utils/state";
 import RoomUsers from "../../components/RoomUsers/index";
+import Notifications from "../../components/Notifications/index";
 
 export const CurrentRoomCtx = createContext<UseRoom>({
 	color: "black",
@@ -80,7 +81,9 @@ function App() {
 								<React.Fragment>
 									{"#" + e.name + " "}
 									<Badge
-										style={{ backgroundColor: "#007bff" }}
+										style={{
+											backgroundColor: "#007bff",
+										}}
 									>
 										{unreadMessages[e.id] || ""}
 									</Badge>
@@ -92,6 +95,8 @@ function App() {
 						</Tab>
 					))}
 				</Tabs>
+
+				<Notifications />
 			</CurrentRoomCtx.Provider>
 		</div>
 	);
