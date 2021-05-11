@@ -51,18 +51,7 @@ export default function MapRenderer() {
 					<MapPin color={e.color} id={e.id} pos={e.pos} key={e.id} />
 				))}
 				{tokens.map((e) => {
-					console.log(e);
-
-					return (
-						<MapToken
-							id={e.id}
-							img={e.imgUrl}
-							pos={e.pos}
-							size={e.size}
-							rotationAngle={e.rotation}
-							key={e.id}
-						/>
-					);
+					return <MapToken {...e} key={e.id} />;
 				})}
 				<MapEventsHandler />
 			</MapContainer>

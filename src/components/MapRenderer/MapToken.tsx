@@ -1,31 +1,25 @@
-import React, { useCallback, useContext, useMemo, useState } from "react";
-import {
-	Icon,
-	LeafletEventHandlerFnMap,
-	Marker as LeafletMarker,
-} from "leaflet";
-import { MarkerData, TokenData } from "../../hooks/useRoom";
-import { Marker, Popup } from "react-leaflet";
-import { useRef } from "react";
-import L, { LatLngExpression } from "leaflet";
-import { CurrentRoomCtx } from "../../pages/Room/index";
-import "./rotation.css";
-import { RotatedMarker } from "./RotatedMarker";
+import { Icon, LatLngExpression, LeafletEventHandlerFnMap } from "leaflet";
 import { RotatedMarker as LeafletRotatedMaker } from "leaflet-marker-rotation";
+import React, { useContext, useMemo, useRef } from "react";
+import { Form, Row } from "react-bootstrap";
+import { Popup } from "react-leaflet";
+import { CurrentRoomCtx } from "../../pages/Room/index";
+import { RotatedMarker } from "./RotatedMarker";
+import "./rotation.css";
+import { TokenData } from "../../hooks/useRoom";
+
+const API = import.meta.env.SNOWPACK_PUBLIC_API_URL;
 
 export default function MapToken({
 	pos,
 	id,
-	img,
+	imgUrl,
 	size,
-	rotationAngle,
-}: {
-	pos: LatLngExpression;
-	id: string;
-	img: string;
-	size: number;
-	rotationAngle: number;
-}) {
+	rotation,
+	status,
+	type,
+	ownerId,
+}: TokenData) {
 	const { updateToken, removeToken, addToken } = useContext(CurrentRoomCtx);
 	const markerRef = useRef<LeafletRotatedMaker>(null);
 	const eventHandlers = useMemo<LeafletEventHandlerFnMap>(
@@ -37,11 +31,17 @@ export default function MapToken({
 						break;
 
 					case "r":
-						const newRotation = rotationAngle + 45;
-						//setRotation(newRotation);
-						console.log(id, pos, newRotation);
-
-						updateToken(id, pos, newRotation);
+						const newRotation = rotation + 45;
+						updateToken({
+							id,
+							imgUrl,
+							ownerId,
+							pos,
+							rotation: newRotation,
+							size,
+							status,
+							type,
+						});
 						break;
 
 					default:
@@ -49,17 +49,32 @@ export default function MapToken({
 				}
 			},
 			dblclick() {
-				addToken(pos, img);
+				addToken(pos, imgUrl);
 			},
 			dragend() {
 				const marker = markerRef.current;
+
 				if (marker != null) {
-					updateToken(id, marker.getLatLng(), rotationAngle);
+					updateToken({
+						id,
+						imgUrl,
+						ownerId,
+						pos: marker.getLatLng(),
+						rotation,
+						size,
+						status,
+						type,
+					});
 				}
 			},
 		}),
-		[rotationAngle, pos],
+		[rotation, pos],
 	);
+
+	const getTokenUrl = () =>
+		`${API}/tokens/${imgUrl
+			.replace(/\//g, "$")
+			.replace("$", "")}/${status}/${type}`;
 
 	return (
 		<RotatedMarker
@@ -67,11 +82,60 @@ export default function MapToken({
 			eventHandlers={eventHandlers}
 			position={pos}
 			ref={markerRef}
-			icon={makeMarkerIcon("/tokens" + img, size)}
-			rotationAngle={rotationAngle}
+			icon={makeMarkerIcon(getTokenUrl(), size)}
+			rotationAngle={rotation}
 			rotationOrigin="center"
 		>
-			{/* <Popup>Character token</Popup> */}
+			<Popup>
+				<Form>
+					<Row>
+						<Form.Control
+							as="select"
+							onChange={(e) => {
+								updateToken({
+									id,
+									imgUrl,
+									ownerId,
+									pos,
+									rotation,
+									size,
+									status: e.target.value,
+									type,
+								});
+							}}
+							value={status}
+						>
+							{["death", "alive"].map((e) => (
+								<option key={e} value={e}>
+									{e}
+								</option>
+							))}
+						</Form.Control>
+						<Form.Control
+							as="select"
+							onChange={(e) => {
+								updateToken({
+									id,
+									imgUrl,
+									ownerId,
+									pos,
+									rotation,
+									size,
+									status,
+									type: e.target.value,
+								});
+							}}
+							value={type}
+						>
+							{["ally", "neutral", "enemy"].map((e) => (
+								<option key={e} value={e}>
+									{e}
+								</option>
+							))}
+						</Form.Control>
+					</Row>
+				</Form>
+			</Popup>
 		</RotatedMarker>
 	);
 }
