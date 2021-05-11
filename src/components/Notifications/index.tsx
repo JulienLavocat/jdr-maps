@@ -13,7 +13,6 @@ export interface IAP {
 
 export default function Notifications() {
 	const iaps = useRecoilValue(inAppNotifications);
-	console.log("IAPS", iaps);
 
 	return (
 		<div

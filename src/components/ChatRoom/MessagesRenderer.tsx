@@ -36,7 +36,7 @@ export default function MessagesRenderer({
 	return (
 		<Row>
 			<Col>
-				<Container>
+				<Container className="chat">
 					<div className="d-flex align-items-center justify-content-between">
 						<h3 className="text-center py-3 d-inline">
 							#{channel.name + " "}
@@ -46,7 +46,7 @@ export default function MessagesRenderer({
 							/>
 						</h3>
 					</div>
-					<ScrollableFeed className="chat">
+					<ScrollableFeed>
 						{isReady ? (
 							msgs
 						) : (

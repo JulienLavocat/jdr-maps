@@ -97,7 +97,7 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 				...old,
 				{
 					body: data.users[data.id].name,
-					duration: 4000,
+					duration: 5000,
 					id: nanoid(),
 					sentAt: new Date(),
 					title: "Room joined",
