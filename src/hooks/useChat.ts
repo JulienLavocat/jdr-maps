@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { Socket } from "socket.io-client";
-import { characterName, userIdState } from "../utils/state";
+import { characterName, chatUnreadsState, userIdState } from "../utils/state";
 export interface MessageSender {
 	name: string;
 	id: string;
@@ -37,6 +37,9 @@ export const useChat: (
 	const [users, setUsers] = useState<Record<string, MessageSender>>({});
 	const senderId = useRecoilValue<string>(userIdState);
 	const senderName = useRecoilValue<string | null>(characterName);
+	const [unreadMessages, setUnreadMessages] = useRecoilState(
+		chatUnreadsState,
+	);
 
 	useEffect(() => {
 		socket.current?.on(
@@ -51,6 +54,11 @@ export const useChat: (
 				setMessages(() => messages);
 				setUsers(() => users);
 				setReady(true);
+				setUnreadMessages((old) => {
+					const newValue = { ...old };
+					newValue[id] = 0;
+					return newValue;
+				});
 			},
 		);
 
@@ -62,14 +70,31 @@ export const useChat: (
 			},
 		);
 
-		socket.current?.on("new_message", (channelId, messages: Message[]) => {
-			if (channelId !== id) return;
-			setMessages(() => messages);
-		});
+		socket.current?.on(
+			"new_message",
+			(channelId, amount: number, messages: Message[]) => {
+				if (channelId !== id) return;
+				setMessages(() => messages);
+				setUnreadMessages((old) => {
+					const newValue = { ...old };
+					newValue[id] =
+						newValue[id] +
+						messages
+							.slice(-amount)
+							.filter((e) => e.sender.id !== senderId).length;
+					return newValue;
+				});
+			},
+		);
 
 		socket.current?.on("clear_messages", (channelId) => {
 			if (channelId !== id) return;
 			setMessages(() => []);
+			setUnreadMessages((old) => {
+				const newValue = { ...old };
+				newValue[id] = Math.max(0, newValue[id] - messages.length);
+				return newValue;
+			});
 		});
 
 		return () => {};
@@ -90,5 +115,7 @@ export const useChat: (
 		},
 		clearMessages: () => socket.current?.emit("clear_messages", id),
 		users,
+		unreadMessages,
+		setUnreadMessages,
 	};
 };

@@ -1,5 +1,5 @@
 import React, { createContext } from "react";
-import { Tab, Tabs } from "react-bootstrap";
+import { Badge, Tab, Tabs } from "react-bootstrap";
 import { useParams } from "react-router";
 import ChatRoom from "../../components/ChatRoom";
 import MapRenderer from "../../components/MapRenderer";
@@ -7,8 +7,8 @@ import MapSelector from "../../components/MapRenderer/AdminTools/MapSelector";
 import TokenSpawner from "../../components/MapRenderer/AdminTools/TokenSpawner";
 import { useRoom, UseRoom } from "../../hooks/useRoom";
 import "./Room.css";
-import { useRecoilValue } from "recoil";
-import { characterName } from "../../utils/state";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { characterName, chatUnreadsState } from "../../utils/state";
 import RoomUsers from "../../components/RoomUsers/index";
 
 export const CurrentRoomCtx = createContext<UseRoom>({
@@ -32,6 +32,8 @@ export const CurrentRoomCtx = createContext<UseRoom>({
 		sendMessage: () => {},
 		users: {},
 		clearMessages: () => {},
+		setUnreadMessages: () => {},
+		unreadMessages: 0,
 	}),
 	users: {},
 	flyTo: () => {},
@@ -41,12 +43,25 @@ export const CurrentRoomCtx = createContext<UseRoom>({
 function App() {
 	const { roomId } = useParams<{ roomId: string }>();
 	const room = useRoom(roomId, useRecoilValue(characterName) || "");
-
+	const [unreadMessages, setUnreadMessages] = useRecoilState(
+		chatUnreadsState,
+	);
 	return (
 		<div>
 			<CurrentRoomCtx.Provider value={room}>
-				<Tabs defaultActiveKey="map">
-					<Tab eventKey="map" title="Map" style={{}}>
+				<Tabs
+					defaultActiveKey="map"
+					onSelect={(key) => {
+						if (key?.startsWith("chat_")) {
+							setUnreadMessages((old) => {
+								const newValue = { ...old };
+								newValue[key.split("chat_")[1]] = 0;
+								return newValue;
+							});
+						}
+					}}
+				>
+					<Tab eventKey="map" title="Map">
 						<MapRenderer />
 					</Tab>
 					<Tab eventKey="tokens" title="Tokens">
@@ -61,7 +76,16 @@ function App() {
 					{room.chats.map((e) => (
 						<Tab
 							eventKey={"chat_" + e.id}
-							title={"#" + e.name}
+							title={
+								<React.Fragment>
+									{"#" + e.name + " "}
+									<Badge
+										style={{ backgroundColor: "#007bff" }}
+									>
+										{unreadMessages[e.id] || ""}
+									</Badge>
+								</React.Fragment>
+							}
 							key={"chat_" + e.id}
 						>
 							<ChatRoom channel={e} />

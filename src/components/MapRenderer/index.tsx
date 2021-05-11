@@ -29,7 +29,6 @@ export default function MapRenderer() {
 				<LayersControl position="bottomright">
 					{maps.map((e, index) => {
 						const isChecked = index === currentMap;
-						console.log(e.name, isChecked);
 
 						return e ? (
 							<LayersControl.BaseLayer
