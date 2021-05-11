@@ -54,10 +54,7 @@ export default function MapToken({
 			dragend() {
 				const marker = markerRef.current;
 				if (marker != null) {
-					const pos = marker.getLatLng();
-
-					console.log(id, pos, rotationAngle);
-					updateToken(id, pos, rotationAngle);
+					updateToken(id, marker.getLatLng(), rotationAngle);
 				}
 			},
 		}),
@@ -82,8 +79,8 @@ export default function MapToken({
 const makeMarkerIcon = (iconUrl: string, size: number) =>
 	new Icon({
 		iconUrl,
-		shadowUrl:
-			"https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+		// shadowUrl:
+		// 	"https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
 		iconSize: [size, size],
 		iconAnchor: [12, 41],
 		popupAnchor: [1, -34],
