@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { CurrentRoomCtx } from "../../../pages/Room/index";
 import tokensIndex from "../tokens.json";
 import { Form, Row, Col, InputGroup, Button, Container } from "react-bootstrap";
+import { nanoid } from "nanoid";
 
 type TokenIndex = Record<
 	string,
@@ -113,7 +114,16 @@ export default function TokenSpawner() {
 						<Button
 							variant="success"
 							onClick={() =>
-								addToken([500, 500], currentToken || "")
+								addToken({
+									imgUrl: currentToken || "",
+									id: null,
+									ownerId: null,
+									pos: null,
+									rotation: null,
+									size: null,
+									status: null,
+									type: null,
+								} as any)
 							}
 						>
 							Add

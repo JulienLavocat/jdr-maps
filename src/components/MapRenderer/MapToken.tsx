@@ -49,7 +49,15 @@ export default function MapToken({
 				}
 			},
 			dblclick() {
-				addToken(pos, imgUrl);
+				addToken({
+					imgUrl,
+					ownerId,
+					pos,
+					rotation,
+					size,
+					status,
+					type,
+				} as any);
 			},
 			dragend() {
 				const marker = markerRef.current;
