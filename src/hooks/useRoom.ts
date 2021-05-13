@@ -108,18 +108,10 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 		});
 
 		socketRef.current.on("markers_single_updated", (marker) => {
-			setMarkers((old) => {
-				const newValue = { ...old };
-				old[marker.id] = marker;
-				return newValue;
-			});
+			setMarkers((old) => ({ ...old, [marker.id]: marker }));
 		});
 		socketRef.current.on("tokens_single_updated", (token) => {
-			setTokens((old) => {
-				const newValue = { ...old };
-				old[token.id] = token;
-				return newValue;
-			});
+			setTokens((old) => ({ ...old, [token.id]: token }));
 		});
 		socketRef.current.on("tokens_updated", (tokens) => {
 			setTokens(() => tokens);

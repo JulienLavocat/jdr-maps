@@ -51,6 +51,8 @@ export default function MapRenderer() {
 					<MapPin color={e.color} id={e.id} pos={e.pos} key={e.id} />
 				))}
 				{Object.values(tokens).map((e) => {
+					console.log(tokens);
+
 					return <MapToken {...e} key={e.id} />;
 				})}
 				<MapEventsHandler />
