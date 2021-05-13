@@ -1,5 +1,5 @@
 import { CRS, LatLngBounds, LatLngExpression } from "leaflet";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import {
 	ImageOverlay,
@@ -16,12 +16,14 @@ import MapsAPI from "../../utils/MapsAPI";
 export default function MapRenderer() {
 	const { markers, tokens, maps, currentMap } = useContext(CurrentRoomCtx);
 	//console.log("Current map", maps[currentMap].name);
-
+	const [bounds, setBounds] = useState<LatLngBounds>(
+		new LatLngBounds([0, 0], [1000, 1000]),
+	);
 	return (
 		<div>
 			<MapContainer
 				center={[500, 500]}
-				zoom={0}
+				zoom={4}
 				crs={CRS.Simple}
 				doubleClickZoom={false}
 				attributionControl={false}
@@ -38,7 +40,13 @@ export default function MapRenderer() {
 							>
 								<ImageOverlay
 									bounds={
-										new LatLngBounds([0, 0], [1000, 1500])
+										new LatLngBounds(
+											[0, 0],
+											[
+												e.metadata.height / 100,
+												e.metadata.width / 100,
+											],
+										)
 									}
 									url={MapsAPI.getMapUrl(e.key)}
 								/>
@@ -55,13 +63,13 @@ export default function MapRenderer() {
 
 					return <MapToken {...e} key={e.id} />;
 				})}
-				<MapEventsHandler />
+				<MapEventsHandler bounds={bounds} />
 			</MapContainer>
 		</div>
 	);
 }
 
-function MapEventsHandler() {
+function MapEventsHandler({ bounds }: { bounds: LatLngBounds }) {
 	const { addMarker, flyTo, on } = useContext(CurrentRoomCtx);
 	const map = useMap();
 	const mousePos = useRef(map.getCenter());
@@ -70,6 +78,12 @@ function MapEventsHandler() {
 	const lastFlyTo = useRef(Date.now());
 
 	on("fly_to", (pos: LatLngExpression, zoom: number) => map.flyTo(pos, zoom));
+
+	useEffect(() => {
+		map.fitWorld();
+
+		return () => {};
+	}, [map]);
 
 	useMapEvents({
 		dblclick: (e) => {
