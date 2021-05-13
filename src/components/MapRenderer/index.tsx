@@ -47,7 +47,7 @@ export default function MapRenderer() {
 					})}
 				</LayersControl>
 
-				{markers.map((e) => (
+				{Object.values(markers).map((e) => (
 					<MapPin color={e.color} id={e.id} pos={e.pos} key={e.id} />
 				))}
 				{Object.values(tokens).map((e) => {

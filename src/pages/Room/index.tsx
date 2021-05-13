@@ -14,8 +14,8 @@ import Notifications from "../../components/Notifications/index";
 
 export const CurrentRoomCtx = createContext<UseRoom>({
 	color: "black",
-	markers: [],
-	tokens: [],
+	markers: {},
+	tokens: {},
 	addMarker: () => {},
 	removeMarker: () => {},
 	addToken: () => {},
