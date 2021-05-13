@@ -7,8 +7,7 @@ import { userIdState, inAppNotifications, characterName } from "../utils/state";
 import { MapData } from "../utils/MapsAPI";
 import { nanoid } from "nanoid";
 
-const SOCKET_SERVER_URL =
-	import.meta.env.SNOWPACK_PUBLIC_SOCKET_SERVER || "/api";
+const SOCKET_SERVER_URL = import.meta.env.SNOWPACK_PUBLIC_SOCKET_SERVER;
 
 export interface MarkerData {
 	id: string;
