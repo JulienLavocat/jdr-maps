@@ -66,7 +66,7 @@ export default function MapSelector() {
 			<Row className="mt-3">
 				<h5>Current level</h5>
 				<p>
-					{maps[currentMap]?.name} ({currentMap})
+					{maps[currentMap]?.metadata.name} ({currentMap})
 				</p>
 			</Row>
 			<Row className="mt-3">
@@ -86,7 +86,7 @@ export default function MapSelector() {
 							{maps.map((e, index) => (
 								<tr key={e.id}>
 									<td>{index + 1}</td>
-									<td>{e.name}</td>
+									<td>{e.metadata.name}</td>
 									<td>{e.id}</td>
 									<td>
 										<FaCheck
