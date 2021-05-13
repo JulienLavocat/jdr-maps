@@ -32,15 +32,15 @@ export default function MapRenderer() {
 
 						return e ? (
 							<LayersControl.BaseLayer
-								key={e.name}
+								key={e.key}
 								checked={isChecked}
-								name={e.name}
+								name={e.metadata.name}
 							>
 								<ImageOverlay
 									bounds={
 										new LatLngBounds([0, 0], [1000, 1500])
 									}
-									url={MapsAPI.getMapUrl(e.name)}
+									url={MapsAPI.getMapUrl(e.key)}
 								/>
 							</LayersControl.BaseLayer>
 						) : null;
