@@ -50,7 +50,7 @@ export default function MapSelector() {
 							>
 								{availableMaps.map((e, index) => (
 									<option key={e.url} value={index}>
-										{e.name}
+										{e.metadata.name}
 									</option>
 								))}
 							</Form.Control>
