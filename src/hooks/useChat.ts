@@ -70,22 +70,20 @@ export const useChat: (
 			},
 		);
 
-		socket.current?.on(
-			"new_message",
-			(channelId, amount: number, messages: Message[]) => {
-				if (channelId !== id) return;
-				setMessages(() => messages);
-				setUnreadMessages((old) => {
-					const newValue = { ...old };
-					newValue[id] =
-						newValue[id] +
-						messages
-							.slice(-amount)
-							.filter((e) => e.sender.id !== senderId).length;
-					return newValue;
-				});
-			},
-		);
+		socket.current?.on("new_message", (channelId, message: Message) => {
+			if (channelId !== id) return;
+
+			setMessages((old) => [...old, message]);
+			setUnreadMessages((old) => {
+				if (message.sender.id === senderId) return old;
+
+				const newValue = { ...old };
+				newValue[id]++;
+
+				console.log(newValue);
+				return newValue;
+			});
+		});
 
 		socket.current?.on("clear_messages", (channelId) => {
 			if (channelId !== id) return;
