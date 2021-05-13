@@ -10,6 +10,9 @@ import { TokenData } from "../../hooks/useRoom";
 
 const API = import.meta.env.SNOWPACK_PUBLIC_API_URL;
 
+const TYPES = ["ally", "neutral", "enemy"];
+const STATUS = ["dead", "alive"];
+
 export default function MapToken({
 	pos,
 	id,
@@ -113,7 +116,7 @@ export default function MapToken({
 							}}
 							value={status}
 						>
-							{["death", "alive"].map((e) => (
+							{STATUS.map((e) => (
 								<option key={e} value={e}>
 									{e}
 								</option>
@@ -135,7 +138,7 @@ export default function MapToken({
 							}}
 							value={type}
 						>
-							{["ally", "neutral", "enemy"].map((e) => (
+							{TYPES.map((e) => (
 								<option key={e} value={e}>
 									{e}
 								</option>
