@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import "./index.css";
 import HomePage from "./pages/HomePage";
-import MapUploader from "./pages/MapUploader.tsx/index";
+import MapUploader from "./pages/MapUploader/index";
 import Room from "./pages/Room";
 import RoomChooser from "./pages/RoomChooser/index";
 import "bootstrap/dist/css/bootstrap.min.css";

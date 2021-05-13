@@ -15,6 +15,8 @@ export interface MapData {
 	date: string;
 	url: string;
 	id: string;
+	key: string;
+	metadata: any;
 }
 
 export default class MapsAPI {
@@ -33,7 +35,7 @@ export default class MapsAPI {
 		onUploadProgress: (progressEvent: any) => void,
 	): Promise<{ success: boolean; message: string; maps: MapData[] }> {
 		const formData = new FormData();
-		formData.append("name", file.name);
+		formData.append("name", name);
 		formData.append("universe", universe);
 		formData.append("file", file); // File must be at the end of body
 

@@ -6,10 +6,15 @@ import {
 	Alert,
 	Button,
 	Card,
+	Col,
+	Container,
+	Form,
+	FormControl,
 	InputGroup,
 	ListGroup,
 	ListGroupItem,
 	ProgressBar,
+	Row,
 } from "react-bootstrap";
 import { FaTrashAlt } from "react-icons/fa";
 
@@ -30,6 +35,7 @@ function UploadFiles() {
 	const [message, setMessage] = useState("");
 	const [fileInfos, setFileInfos] = useState<MapData[]>([]);
 	const [uploading, setUploading] = useState(false);
+	const [mapName, setMapName] = useState("");
 
 	useEffect(() => {
 		MapsAPI.getMaps().then((r) => {
@@ -38,14 +44,16 @@ function UploadFiles() {
 		return () => {};
 	}, []);
 
-	const upload = async () => {
+	const upload = async (e: any) => {
+		e.preventDefault();
+
 		if (!currentFile) return;
 		setProgress(0);
 		setUploading(true);
 		try {
 			const res = await MapsAPI.uploadMap(
 				currentFile,
-				"testMap.png",
+				mapName,
 				"jdr",
 				(progress) =>
 					setProgress(
@@ -66,7 +74,7 @@ function UploadFiles() {
 	};
 
 	return (
-		<div>
+		<Container fluid>
 			{uploading && (
 				<ProgressBar
 					now={progress}
@@ -77,29 +85,47 @@ function UploadFiles() {
 					label={`${progress}%`}
 				></ProgressBar>
 			)}
+			<Form onSubmit={upload}>
+				<Col sm={2}>
+					<Row>
+						<InputGroup>
+							<label className="btn btn-default">
+								<FormControl
+									type="file"
+									onChange={(ev) => {
+										const e = ev as any;
+										setSelectedFiles(e.target.files);
 
-			<InputGroup>
-				<label className="btn btn-default">
-					<input
-						type="file"
-						onChange={(e) => {
-							setSelectedFiles(e.target.files);
+										if (e.target.files)
+											setCurrentFile(
+												e.target.files[0] || null,
+											);
+									}}
+								/>
+							</label>
+							<InputGroup.Append></InputGroup.Append>
+						</InputGroup>
+					</Row>
 
-							if (e.target.files)
-								setCurrentFile(e.target.files[0] || null);
-						}}
-					/>
-				</label>
-				<InputGroup.Append>
-					<button
-						className="btn btn-success"
-						disabled={!currentFile}
-						onClick={upload}
-					>
-						Upload
-					</button>
-				</InputGroup.Append>
-			</InputGroup>
+					<Row>
+						<FormControl
+							placeholder="Map name"
+							value={mapName}
+							required={true}
+							onChange={(e) => setMapName(e.target.value)}
+						/>
+					</Row>
+					<Row>
+						<Button
+							className="btn btn-success"
+							disabled={!currentFile}
+							type="submit"
+						>
+							Upload
+						</Button>
+					</Row>
+				</Col>
+			</Form>
 
 			<Alert variant="light">{message}</Alert>
 
@@ -108,15 +134,15 @@ function UploadFiles() {
 				{fileInfos ? (
 					<ListGroup variant="flush">
 						{fileInfos.map((file) => (
-							<ListGroupItem key={file.name}>
+							<ListGroupItem key={file.key}>
 								<a href={file.url} className="no-decorations">
-									{file.name}
+									{file.metadata.name}
 								</a>
 								&nbsp; &nbsp;
 								<FaTrashAlt
 									onClick={async () => {
 										const maps = await MapsAPI.deleteMap(
-											file.name,
+											file.key,
 										);
 
 										setFileInfos(maps);
@@ -131,6 +157,6 @@ function UploadFiles() {
 					</div>
 				)}
 			</Card>
-		</div>
+		</Container>
 	);
 }
