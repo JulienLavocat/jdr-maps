@@ -16,9 +16,7 @@ import MapsAPI from "../../utils/MapsAPI";
 export default function MapRenderer() {
 	const { markers, tokens, maps, currentMap } = useContext(CurrentRoomCtx);
 	//console.log("Current map", maps[currentMap].name);
-	const [bounds, setBounds] = useState<LatLngBounds>(
-		new LatLngBounds([0, 0], [1000, 1000]),
-	);
+
 	return (
 		<div>
 			<MapContainer
@@ -63,13 +61,13 @@ export default function MapRenderer() {
 
 					return <MapToken {...e} key={e.id} />;
 				})}
-				<MapEventsHandler bounds={bounds} />
+				<MapEventsHandler />
 			</MapContainer>
 		</div>
 	);
 }
 
-function MapEventsHandler({ bounds }: { bounds: LatLngBounds }) {
+function MapEventsHandler() {
 	const { addMarker, flyTo, on } = useContext(CurrentRoomCtx);
 	const map = useMap();
 	const mousePos = useRef(map.getCenter());
