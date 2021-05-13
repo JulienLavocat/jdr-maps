@@ -38,7 +38,7 @@ export default function MapRenderer() {
 							>
 								<ImageOverlay
 									bounds={
-										new LatLngBounds([0, 0], [1000, 1000])
+										new LatLngBounds([0, 0], [1000, 1500])
 									}
 									url={MapsAPI.getMapUrl(e.name)}
 								/>
