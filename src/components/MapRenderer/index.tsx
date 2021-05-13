@@ -21,7 +21,7 @@ export default function MapRenderer() {
 		<div>
 			<MapContainer
 				center={[500, 500]}
-				zoom={4}
+				zoom={0}
 				crs={CRS.Simple}
 				doubleClickZoom={false}
 				attributionControl={false}
