@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = import.meta.env.SNOWPACK_PUBLIC_API_URL;
+const API = import.meta.env.SNOWPACK_PUBLIC_API_URL || "/api";
 const S3: string = import.meta.env.SNOWPACK_PUBLIC_S3_URL;
 
 const http = axios.create({

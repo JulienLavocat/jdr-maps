@@ -8,7 +8,7 @@ import { RotatedMarker } from "./RotatedMarker";
 import "./rotation.css";
 import { TokenData } from "../../hooks/useRoom";
 
-const API = import.meta.env.SNOWPACK_PUBLIC_API_URL;
+const API = import.meta.env.SNOWPACK_PUBLIC_API_URL || "/api";
 
 const TYPES = ["ally", "neutral", "enemy"];
 const STATUS = ["dead", "alive"];
