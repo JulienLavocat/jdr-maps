@@ -30,7 +30,7 @@ export interface TokenData {
 export interface UseRoom {
 	color: string;
 	markers: MarkerData[];
-	tokens: TokenData[];
+	tokens: Record<string, TokenData>;
 	addToken: (token: TokenData) => void;
 	updateToken: (token: TokenData) => void;
 	removeToken: (id: string) => void;
@@ -60,7 +60,7 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 ) => {
 	const [chats, setChats] = useState<{ name: string; id: string }[]>([]);
 	const [markers, setMarkers] = useState<MarkerData[]>([]);
-	const [tokens, setTokens] = useState<TokenData[]>([]);
+	const [tokens, setTokens] = useState<Record<string, TokenData>>({});
 	const [currentMap, setCurrentMap] = useState(0);
 	const [maps, setMaps] = useState<MapData[]>([]);
 	const [users, setUsers] = useState<Record<string, UserInfos>>({});
@@ -85,7 +85,7 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 
 			if (userId === data.id) setColor(data.color);
 			setMarkers(Object.values(data.markers));
-			setTokens(Object.values(data.tokens));
+			setTokens(data.tokens);
 			setMaps(data.map.maps);
 			setCurrentMap(data.map.current);
 			setChats(data.chats);
@@ -107,8 +107,22 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 			setMarkers(() => Object.values(markers));
 		});
 
+		socketRef.current.on("markers_single_updated", (marker) => {
+			setMarkers((old) => {
+				const newValue = { ...old };
+				old[marker.id] = marker;
+				return newValue;
+			});
+		});
+		socketRef.current.on("tokens_single_updated", (token) => {
+			setTokens((old) => {
+				const newValue = { ...old };
+				old[token.id] = token;
+				return newValue;
+			});
+		});
 		socketRef.current.on("tokens_updated", (tokens) => {
-			setTokens(() => Object.values(tokens));
+			setTokens(() => tokens);
 		});
 
 		socketRef.current.on("set_current_map", (map: number) => {
