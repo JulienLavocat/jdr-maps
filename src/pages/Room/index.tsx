@@ -39,6 +39,9 @@ export const CurrentRoomCtx = createContext<UseRoom>({
 	users: {},
 	flyTo: () => {},
 	on: () => {},
+	addShape: () => {},
+	shapes: {},
+	removeShape: () => {},
 });
 
 function App() {

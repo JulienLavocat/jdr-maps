@@ -27,6 +27,15 @@ export interface TokenData {
 	rotation: number;
 }
 
+export interface ShapeData {
+	id: string;
+	type: string;
+	pos: LatLngExpression;
+	ownerId: string;
+	shape: Record<string, any>;
+	color: string;
+}
+
 export interface UseRoom {
 	color: string;
 	markers: Record<string, MarkerData>;
@@ -45,6 +54,9 @@ export interface UseRoom {
 	useChat: (channelId: string) => UseChat;
 	users: Record<string, UserInfos>;
 	on: (event: string, handler: (...args: any[]) => void) => void;
+	addShape: (shape: ShapeData) => void;
+	shapes: Record<string, ShapeData>;
+	removeShape: (shapeId: string) => void;
 }
 
 export type RoomEventsMap = Record<string, (...args: any[]) => void>;
@@ -61,6 +73,7 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 	const [chats, setChats] = useState<{ name: string; id: string }[]>([]);
 	const [markers, setMarkers] = useState<Record<string, MarkerData>>({});
 	const [tokens, setTokens] = useState<Record<string, TokenData>>({});
+	const [shapes, setShapes] = useState<Record<string, ShapeData>>({});
 	const [currentMap, setCurrentMap] = useState(0);
 	const [maps, setMaps] = useState<MapData[]>([]);
 	const [users, setUsers] = useState<Record<string, UserInfos>>({});
@@ -90,6 +103,7 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 			setCurrentMap(data.map.current);
 			setChats(data.chats);
 			setUsers(data.users);
+			setShapes(data.shapes);
 
 			setIAPS((old) => [
 				...old,
@@ -115,6 +129,14 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 		});
 		socketRef.current.on("tokens_updated", (tokens) => {
 			setTokens(() => tokens);
+		});
+
+		socketRef.current.on("shapes_updated", (shapes) => {
+			setShapes(() => shapes);
+		});
+
+		socketRef.current.on("shapes_single_updated", (shape) => {
+			setShapes((old) => ({ ...old, [shape.id]: shape }));
 		});
 
 		socketRef.current.on("set_current_map", (map: number) => {
@@ -183,5 +205,10 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 			socketRef.current?.emit("set_current_map", roomId, map),
 		setMaps: (maps: MapData[]) =>
 			socketRef.current?.emit("set_maps", roomId, maps),
+		addShape: (shape: ShapeData) =>
+			socketRef.current?.emit("add_shape", roomId, shape),
+		shapes,
+		removeShape: (shapeId: string) =>
+			socketRef.current?.emit("remove_shape", roomId, shapeId),
 	};
 };

@@ -17,10 +17,13 @@ import { useLeafletContext } from "@react-leaflet/core";
 import EditControl from "../EditControl/EditControl.jsx";
 
 import "leaflet-draw/dist/leaflet.draw.css";
+import { nanoid } from "nanoid";
+import ShapesRenderer from "./ShapesRenderer";
 
 export default function MapRenderer() {
-	const { markers, tokens, maps, currentMap } = useContext(CurrentRoomCtx);
-	//console.log("Current map", maps[currentMap].name);
+	const { markers, tokens, maps, currentMap, addShape, shapes } = useContext(
+		CurrentRoomCtx,
+	);
 
 	return (
 		<div>
@@ -34,22 +37,36 @@ export default function MapRenderer() {
 				<FeatureGroup>
 					<EditControl
 						position="topleft"
-						// onEdited={(e: any) => {
-						// 	console.log(e);
-						// }}
 						onCreated={(e: any) => {
-							console.log(e);
+							e.target.removeLayer(e.layer);
+							addShape({
+								id: nanoid(),
+								color: "#66ff66",
+								ownerId: "",
+								pos: e.layer._latlng,
+								shape: {
+									radius: e.layer.options.radius,
+								},
+								type: e.layerType,
+							});
 						}}
-						// onDeleted={(e: any) => {
-						// 	console.log(e);
-						// }}
+						// onDrawStop={(e: any) => console.log(e)}
 						draw={{
+							circle: {
+								showRadius: false,
+								shapeOptions: {
+									color: "#66ff66",
+								},
+							},
+							polyline: false,
+							polygon: false,
 							rectangle: false,
 							marker: false,
 							circlemarker: false,
 						}}
 					/>
 					{/* <Circle center={[51.51, -0.06]} radius={200} /> */}
+					<ShapesRenderer shapes={Object.values(shapes)} />
 				</FeatureGroup>
 				<LayersControl position="bottomright">
 					{maps.map((e, index) => {
@@ -82,8 +99,6 @@ export default function MapRenderer() {
 					<MapPin color={e.color} id={e.id} pos={e.pos} key={e.id} />
 				))}
 				{Object.values(tokens).map((e) => {
-					console.log(tokens);
-
 					return <MapToken {...e} key={e.id} />;
 				})}
 				<MapEventsHandler />
@@ -99,9 +114,6 @@ function MapEventsHandler() {
 
 	const lastKeydown = useRef(Date.now());
 	const lastFlyTo = useRef(Date.now());
-
-	const lf = useLeafletContext();
-	console.log(lf);
 
 	on("fly_to", (pos: LatLngExpression, zoom: number) => map.flyTo(pos, zoom));
 
@@ -136,8 +148,6 @@ function MapEventsHandler() {
 		},
 		mousemove: (e) => (mousePos.current = e.latlng),
 	});
-
-	// return null;
 
 	return null;
 }
