@@ -205,8 +205,10 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 			socketRef.current?.emit("set_current_map", roomId, map),
 		setMaps: (maps: MapData[]) =>
 			socketRef.current?.emit("set_maps", roomId, maps),
-		addShape: (shape: ShapeData) =>
-			socketRef.current?.emit("add_shape", roomId, shape),
+		addShape: (shape: ShapeData) => {
+			console.log(color);
+			socketRef.current?.emit("add_shape", roomId, { ...shape, color });
+		},
 		shapes,
 		removeShape: (shapeId: string) =>
 			socketRef.current?.emit("remove_shape", roomId, shapeId),

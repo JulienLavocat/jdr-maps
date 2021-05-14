@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Circle } from "react-leaflet";
 import { ShapeData } from "../../hooks/useRoom";
 import { CurrentRoomCtx } from "../../pages/Room/index";
-import {} from "leaflet-draw";
+import { COLORS_DETAILS } from "./MarkerIcons";
 
 export default function ShapesRenderer({ shapes }: { shapes: ShapeData[] }) {
 	const { removeShape } = useContext(CurrentRoomCtx);
@@ -24,7 +24,8 @@ export default function ShapesRenderer({ shapes }: { shapes: ShapeData[] }) {
 									},
 								}}
 								center={shape.pos}
-								color={shape.color}
+								color={COLORS_DETAILS[shape.color].outside}
+								fillColor={COLORS_DETAILS[shape.color].inside}
 								radius={shape.shape.radius}
 							></Circle>
 						);

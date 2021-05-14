@@ -14,16 +14,23 @@ import { MapPin } from "./MapPin";
 import MapToken from "./MapToken";
 import MapsAPI from "../../utils/MapsAPI";
 import { useLeafletContext } from "@react-leaflet/core";
-import EditControl from "../EditControl/EditControl.jsx";
+import EditControl from "../EditControl/index.js";
 
 import "leaflet-draw/dist/leaflet.draw.css";
 import { nanoid } from "nanoid";
 import ShapesRenderer from "./ShapesRenderer";
+import { COLORS_DETAILS } from "./MarkerIcons";
 
 export default function MapRenderer() {
-	const { markers, tokens, maps, currentMap, addShape, shapes } = useContext(
-		CurrentRoomCtx,
-	);
+	const {
+		markers,
+		tokens,
+		maps,
+		currentMap,
+		addShape,
+		shapes,
+		color,
+	} = useContext(CurrentRoomCtx);
 
 	return (
 		<div>
@@ -36,12 +43,15 @@ export default function MapRenderer() {
 			>
 				<FeatureGroup>
 					<EditControl
+						edit={{}}
 						position="topleft"
 						onCreated={(e: any) => {
 							e.target.removeLayer(e.layer);
+							console.log(color);
+
 							addShape({
 								id: nanoid(),
-								color: "#66ff66",
+								color,
 								ownerId: "",
 								pos: e.layer._latlng,
 								shape: {
@@ -49,13 +59,16 @@ export default function MapRenderer() {
 								},
 								type: e.layerType,
 							});
+
+							console.log(color);
 						}}
 						// onDrawStop={(e: any) => console.log(e)}
 						draw={{
 							circle: {
 								showRadius: false,
 								shapeOptions: {
-									color: "#66ff66",
+									color: COLORS_DETAILS[color].outside,
+									fillColor: COLORS_DETAILS[color].inside,
 								},
 							},
 							polyline: false,

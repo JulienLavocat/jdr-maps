@@ -1,5 +1,5 @@
+import * as React from "react";
 import { ControlPosition, DrawOptions } from "leaflet";
-
 export interface EditControlProps {
 	onEdited?: Function;
 	onDrawStart?: Function;
@@ -28,3 +28,5 @@ export interface EditControlProps {
 	edit: any;
 	position: ControlPosition;
 }
+
+export default class EditControl extends React.Component<EditControlProps> {}
