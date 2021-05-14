@@ -7,11 +7,16 @@ import {
 	MapContainer,
 	useMap,
 	useMapEvents,
+	FeatureGroup,
 } from "react-leaflet";
 import { CurrentRoomCtx } from "../../pages/Room/index";
 import { MapPin } from "./MapPin";
 import MapToken from "./MapToken";
 import MapsAPI from "../../utils/MapsAPI";
+import { useLeafletContext } from "@react-leaflet/core";
+import EditControl from "../EditControl/EditControl.jsx";
+
+import "leaflet-draw/dist/leaflet.draw.css";
 
 export default function MapRenderer() {
 	const { markers, tokens, maps, currentMap } = useContext(CurrentRoomCtx);
@@ -26,6 +31,26 @@ export default function MapRenderer() {
 				doubleClickZoom={false}
 				attributionControl={false}
 			>
+				<FeatureGroup>
+					<EditControl
+						position="topleft"
+						// onEdited={(e: any) => {
+						// 	console.log(e);
+						// }}
+						onCreated={(e: any) => {
+							console.log(e);
+						}}
+						// onDeleted={(e: any) => {
+						// 	console.log(e);
+						// }}
+						draw={{
+							rectangle: false,
+							marker: false,
+							circlemarker: false,
+						}}
+					/>
+					{/* <Circle center={[51.51, -0.06]} radius={200} /> */}
+				</FeatureGroup>
 				<LayersControl position="bottomright">
 					{maps.map((e, index) => {
 						const isChecked = index === currentMap;
@@ -41,8 +66,8 @@ export default function MapRenderer() {
 										new LatLngBounds(
 											[0, 0],
 											[
-												e.metadata.height / 100,
-												e.metadata.width / 100,
+												e.metadata.height / 10,
+												e.metadata.width / 10,
 											],
 										)
 									}
@@ -74,6 +99,9 @@ function MapEventsHandler() {
 
 	const lastKeydown = useRef(Date.now());
 	const lastFlyTo = useRef(Date.now());
+
+	const lf = useLeafletContext();
+	console.log(lf);
 
 	on("fly_to", (pos: LatLngExpression, zoom: number) => map.flyTo(pos, zoom));
 
@@ -108,6 +136,8 @@ function MapEventsHandler() {
 		},
 		mousemove: (e) => (mousePos.current = e.latlng),
 	});
+
+	// return null;
 
 	return null;
 }

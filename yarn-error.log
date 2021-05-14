@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\yarn\bin\yarn.js add react-intersection-observer
+  C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\yarn\bin\yarn.js add @types/lodash.isequal
 
 PATH: 
   C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\julie\bin;C:\Program Files\Oculus\Support\oculus-runtime;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;C:\Program Files\Git\cmd;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Users\julie\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\julie\AppData\Local\Microsoft\WindowsApps;C:\Users\julie\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\julie\Dev\PathSoftwares;C:\Program Files\MongoDB\Tools\100\bin;C:\Users\julie\AppData\Roaming\nvm;C:\Program Files\nodejs
@@ -27,16 +27,23 @@ npm manifest:
     },
     "dependencies": {
       "@types/leaflet": "^1.7.0",
+      "@types/leaflet-draw": "^1.0.3",
       "@types/react-router-dom": "^5.1.7",
       "axios": "^0.21.1",
       "bootstrap": "^5.0.0",
+      "fast-deep-equal": "^3.1.3",
       "leaflet": "^1.7.1",
+      "leaflet-draw": "^1.0.4",
+      "leaflet-marker-rotation": "^0.3.0",
+      "lodash.isequal": "^4.5.0",
       "msg": "^1.0.0",
       "nanoid": "^3.1.22",
+      "prop-types": "^15.7.2",
       "react": "^17.0.2",
       "react-bootstrap": "^1.5.2",
       "react-dom": "^17.0.2",
       "react-icons": "^4.2.0",
+      "react-intersection-observer": "^8.31.1",
       "react-leaflet": "^3.1.0",
       "react-overlays": "^5.0.1",
       "react-router-dom": "^5.2.0",
@@ -659,7 +666,14 @@ Lockfile:
       "@types/koa-compose" "*"
       "@types/node" "*"
   
-  "@types/leaflet@^1.7.0":
+  "@types/leaflet-draw@^1.0.3":
+    version "1.0.3"
+    resolved "https://registry.yarnpkg.com/@types/leaflet-draw/-/leaflet-draw-1.0.3.tgz#73a003bf1def575c7cfd3205fa48d26bd0dc4273"
+    integrity sha512-ayNnO40vafd1Do3h7v0++toEzcO1CEjtFBqPunF3695WU0OTPzJ82XUQcd4MlYTuPSP3OsZm5ni361tgmcjxNw==
+    dependencies:
+      "@types/leaflet" "*"
+  
+  "@types/leaflet@*", "@types/leaflet@^1.7.0":
     version "1.7.0"
     resolved "https://registry.yarnpkg.com/@types/leaflet/-/leaflet-1.7.0.tgz#3700fb5d29a8214fbd496565b08ec28e40cee808"
     integrity sha512-ltv5jR+VjKSMtoDkxH61Rsbo0zLU7iqyOXpVPkAX4F+79fg2eymC7t0msWsfNaEZO1FGTIQATCCCQe+ijWoicg==
@@ -1867,7 +1881,12 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
     integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
   
-  fast-deep-equal@^3.1.1:
+  fast-deep-equal@^2.0.1:
+    version "2.0.1"
+    resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-2.0.1.tgz#7b05218ddf9667bf7f370bf7fdb2cb15fdd0aa49"
+    integrity sha1-ewUhjd+WZ79/Nwv3/bLLFf3Qqkk=
+  
+  fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
     version "3.1.3"
     resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
     integrity sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==
@@ -2236,11 +2255,6 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-2.1.0.tgz#dc91fcba42e4d06e4abaed33b3e7a3c02f514ea0"
     integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
   
-  humanize-duration@^3.26.0:
-    version "3.26.0"
-    resolved "https://registry.yarnpkg.com/humanize-duration/-/humanize-duration-3.26.0.tgz#4d77f6b3d2fe0ca1ff14623ccc2b2f8b48ab1aaf"
-    integrity sha512-SddekX3p5ApvPY6bbAYppGKe874jP6iFZXYtrQToDV4R0j2UpTYPqwTFM2QpXpuw9DhS/eXTUnKYTF9TbXAJ6A==
-  
   humanize-ms@^1.2.1:
     version "1.2.1"
     resolved "https://registry.yarnpkg.com/humanize-ms/-/humanize-ms-1.2.1.tgz#c46e3159a293f6b896da29316d8b6fe8bb79bbed"
@@ -2598,6 +2612,16 @@ Lockfile:
       type-is "^1.6.16"
       vary "^1.1.2"
   
+  leaflet-draw@^1.0.4:
+    version "1.0.4"
+    resolved "https://registry.yarnpkg.com/leaflet-draw/-/leaflet-draw-1.0.4.tgz#45be92f378ed253e7202fdeda1fcc71885198d46"
+    integrity sha512-rsQ6saQO5ST5Aj6XRFylr5zvarWgzWnrg46zQ1MEOEIHsppdC/8hnN8qMoFvACsPvTioAuysya/TVtog15tyAQ==
+  
+  leaflet-marker-rotation@^0.3.0:
+    version "0.3.0"
+    resolved "https://registry.yarnpkg.com/leaflet-marker-rotation/-/leaflet-marker-rotation-0.3.0.tgz#9541836c3f9a60e3f95329295e58e1575b3d39a0"
+    integrity sha512-vzmwpH9jWd6Fc36Wp7eOavprE3rtG3/olu/cdPVPRe8uB6ZfdPUOClu1iirS5z5tMwkSbyduBwdAcZqxn5QT1Q==
+  
   leaflet@^1.7.1:
     version "1.7.1"
     resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.7.1.tgz#10d684916edfe1bf41d688a3b97127c0322a2a19"
@@ -2618,7 +2642,7 @@ Lockfile:
     dependencies:
       p-locate "^4.1.0"
   
-  lodash-es@^4.17.20:
+  lodash-es@^4.17.15, lodash-es@^4.17.20:
     version "4.17.21"
     resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
     integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
@@ -2627,6 +2651,11 @@ Lockfile:
     version "4.3.0"
     resolved "https://registry.yarnpkg.com/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz#b28aa6288a2b9fc651035c7711f65ab6190331a6"
     integrity sha1-soqmKIorn8ZRA1x3EfZathkDMaY=
+  
+  lodash.isequal@^4.5.0:
+    version "4.5.0"
+    resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+    integrity sha1-QVxEePK8wwEgwizhDtMib30+GOA=
   
   lodash.throttle@^4.1.1:
     version "4.1.1"
@@ -3358,6 +3387,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.2.0.tgz#6dda80c8a8f338ff96a1851424d63083282630d0"
     integrity sha512-rmzEDFt+AVXRzD7zDE21gcxyBizD/3NqjbX6cmViAgdqfJ2UiLer8927/QhhrXQV7dEj/1EGuOTPp7JnLYVJKQ==
   
+  react-intersection-observer@^8.31.1:
+    version "8.31.1"
+    resolved "https://registry.yarnpkg.com/react-intersection-observer/-/react-intersection-observer-8.31.1.tgz#dea4e9a10bbfc899c4159eadd94354cc083920b5"
+    integrity sha512-Q4OH2aUXcEi6tPBBgOBjfodoRM68wikXqqbPf8FaY4VBMcSACbxulfkW/OqcfLYfSAOEPGvxN+NCn9PqBgAOfQ==
+  
   react-is@^16.3.2, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1:
     version "16.13.1"
     resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
@@ -3367,6 +3401,13 @@ Lockfile:
     version "17.0.2"
     resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
     integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
+  
+  "react-leaflet-draw@https://github.com/alex3165/react-leaflet-draw":
+    version "0.19.7"
+    resolved "https://github.com/alex3165/react-leaflet-draw#4c6de821a49ca40ef89013a8dd07162348d6926b"
+    dependencies:
+      fast-deep-equal "^2.0.1"
+      lodash-es "^4.17.15"
   
   react-leaflet@^3.1.0:
     version "3.1.0"
