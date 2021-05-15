@@ -1,11 +1,11 @@
 import { LatLngExpression } from "leaflet";
-import { useEffect, useRef, useState } from "react";
-import { useSetRecoilState, useRecoilState } from "recoil";
-import socketIO, { Socket } from "socket.io-client";
-import { useChat, UseChat, MessageSender } from "./useChat";
-import { userIdState, inAppNotifications, characterName } from "../utils/state";
-import { MapData } from "../utils/MapsAPI";
 import { nanoid } from "nanoid";
+import { useEffect, useRef, useState } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import socketIO, { Socket } from "socket.io-client";
+import { MapData } from "../utils/MapsAPI";
+import { inAppNotifications, userIdState } from "../utils/state";
+import { useChat, UseChat } from "./useChat";
 
 const SOCKET_SERVER_URL = import.meta.env.SNOWPACK_PUBLIC_SOCKET_SERVER;
 
@@ -205,10 +205,8 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 			socketRef.current?.emit("set_current_map", roomId, map),
 		setMaps: (maps: MapData[]) =>
 			socketRef.current?.emit("set_maps", roomId, maps),
-		addShape: (shape: ShapeData) => {
-			console.log(color);
-			socketRef.current?.emit("add_shape", roomId, { ...shape, color });
-		},
+		addShape: (shape: ShapeData) =>
+			socketRef.current?.emit("add_shape", roomId, { ...shape, color }),
 		shapes,
 		removeShape: (shapeId: string) =>
 			socketRef.current?.emit("remove_shape", roomId, shapeId),

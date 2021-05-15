@@ -1,25 +1,22 @@
 import { CRS, LatLngBounds, LatLngExpression } from "leaflet";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
+import "leaflet-draw/dist/leaflet.draw.css";
+import { nanoid } from "nanoid";
+import React, { useContext, useEffect, useRef } from "react";
 import {
+	FeatureGroup,
 	ImageOverlay,
 	LayersControl,
 	MapContainer,
 	useMap,
 	useMapEvents,
-	FeatureGroup,
 } from "react-leaflet";
 import { CurrentRoomCtx } from "../../pages/Room/index";
+import MapsAPI from "../../utils/MapsAPI";
+import EditControl from "../EditControl/index.js";
 import { MapPin } from "./MapPin";
 import MapToken from "./MapToken";
-import MapsAPI from "../../utils/MapsAPI";
-import { useLeafletContext } from "@react-leaflet/core";
-import EditControl from "../EditControl/index.js";
-
-import "leaflet-draw/dist/leaflet.draw.css";
-import { nanoid } from "nanoid";
-import ShapesRenderer from "./ShapesRenderer";
 import { COLORS_DETAILS } from "./MarkerIcons";
+import ShapesRenderer from "./ShapesRenderer";
 
 export default function MapRenderer() {
 	const {
@@ -31,6 +28,21 @@ export default function MapRenderer() {
 		shapes,
 		color,
 	} = useContext(CurrentRoomCtx);
+
+	const onCreated = (e: any) => {
+		e.target.removeLayer(e.layer);
+
+		addShape({
+			id: nanoid(),
+			color, // THIS DOES NOT WORKS AND IT'S DRIVING ME INSANE, ENDED UP SETTING COLOR ON SERVER
+			ownerId: "",
+			pos: e.layer._latlng,
+			shape: {
+				radius: e.layer.options.radius,
+			},
+			type: e.layerType,
+		});
+	};
 
 	return (
 		<div>
@@ -45,23 +57,7 @@ export default function MapRenderer() {
 					<EditControl
 						edit={{}}
 						position="topleft"
-						onCreated={(e: any) => {
-							e.target.removeLayer(e.layer);
-							console.log(color);
-
-							addShape({
-								id: nanoid(),
-								color,
-								ownerId: "",
-								pos: e.layer._latlng,
-								shape: {
-									radius: e.layer.options.radius,
-								},
-								type: e.layerType,
-							});
-
-							console.log(color);
-						}}
+						onCreated={onCreated}
 						// onDrawStop={(e: any) => console.log(e)}
 						draw={{
 							circle: {
