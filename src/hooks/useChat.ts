@@ -12,6 +12,7 @@ export interface Message {
 	sentAt?: number;
 	sender: MessageSender;
 	content: string;
+	to?: string;
 }
 export interface UseChat {
 	messages: Message[];
@@ -79,8 +80,6 @@ export const useChat: (
 
 				const newValue = { ...old };
 				newValue[id]++;
-
-				console.log(newValue);
 				return newValue;
 			});
 		});

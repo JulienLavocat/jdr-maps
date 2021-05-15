@@ -42,6 +42,8 @@ export default function MessageRenderer({
 		renderedContent = renderedContent.replaceAll(matchAllParams, "");
 	}
 
+	if (msg.to && msg.to !== senderId) return null;
+
 	return (
 		<div
 			className="list-group-item"
