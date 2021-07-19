@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid";
+import { string } from "prop-types";
 import { atom, RecoilState } from "recoil";
 import { IAP } from "../components/Notifications/index";
 
@@ -20,4 +21,34 @@ export const chatUnreadsState = atom<Record<string, number>>({
 export const inAppNotifications = atom<IAP[]>({
 	key: "iap",
 	default: [],
+});
+
+export const isAuthenticatedState = atom<boolean>({
+	key: "isAuthenticated",
+	default: false,
+});
+
+export type UserState = {
+	token: string;
+	user: {
+		id: string;
+		username: string;
+		avatarId: string;
+		email: string;
+		discordId: string;
+	};
+};
+
+export const userState = atom<UserState>({
+	key: "user",
+	default: {
+		token: "",
+		user: {
+			discordId: "",
+			avatarId: "",
+			email: "",
+			username: "",
+			id: "",
+		},
+	},
 });

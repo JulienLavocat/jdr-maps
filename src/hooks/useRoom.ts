@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import socketIO, { Socket } from "socket.io-client";
 import { MapData } from "../utils/MapsAPI";
-import { inAppNotifications, userIdState } from "../utils/state";
+import { inAppNotifications, userIdState, userState } from "../utils/state";
 import { useChat, UseChat } from "./useChat";
 
 const SOCKET_SERVER_URL = import.meta.env.SNOWPACK_PUBLIC_SOCKET_SERVER;
@@ -79,24 +79,24 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 	const [users, setUsers] = useState<Record<string, UserInfos>>({});
 	const socketRef = useRef<Socket>();
 	const [color, setColor] = useState<string>("black");
-	const [userId] = useRecoilState<string>(userIdState);
+	const [{ user, token }] = useRecoilState(userState);
 	const setIAPS = useSetRecoilState(inAppNotifications);
 
 	useEffect(() => {
 		// Creates a WebSocket connection
 		socketRef.current = socketIO(SOCKET_SERVER_URL, {
 			transports: ["websocket"],
-			query: { roomId, userId, name },
+			query: { roomId, token },
 		});
 
 		socketRef.current.on("connect", () => {
-			console.log("connected", "userId", userId);
+			console.log("connected", "userId", user.id);
 		});
 
 		socketRef.current.on("room_joined", (data) => {
 			console.log("room joined", data);
 
-			if (userId === data.id) setColor(data.color);
+			if (user.id === data.id) setColor(data.color);
 			setMarkers(data.markers);
 			setTokens(data.tokens);
 			setMaps(data.map.maps);
