@@ -86,7 +86,7 @@ export const useRoom: (roomId: string, name: string) => UseRoom = (
 		// Creates a WebSocket connection
 		socketRef.current = socketIO(SOCKET_SERVER_URL, {
 			transports: ["websocket"],
-			query: { roomId, token },
+			query: { roomId, token, name },
 		});
 
 		socketRef.current.on("connect", () => {

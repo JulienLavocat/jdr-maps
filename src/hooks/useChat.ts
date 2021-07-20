@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { Socket } from "socket.io-client";
-import { characterName, chatUnreadsState, userIdState } from "../utils/state";
+import {
+	characterName,
+	chatUnreadsState,
+	userIdState,
+	userState,
+} from "../utils/state";
 export interface MessageSender {
 	name: string;
 	id: string;
@@ -36,7 +41,7 @@ export const useChat: (
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [isReady, setReady] = useState<boolean>(false);
 	const [users, setUsers] = useState<Record<string, MessageSender>>({});
-	const senderId = useRecoilValue<string>(userIdState);
+	const { user } = useRecoilValue(userState);
 	const senderName = useRecoilValue<string | null>(characterName);
 	const [unreadMessages, setUnreadMessages] = useRecoilState(
 		chatUnreadsState,
@@ -76,7 +81,7 @@ export const useChat: (
 
 			setMessages((old) => [...old, message]);
 			setUnreadMessages((old) => {
-				if (message.sender.id === senderId) return old;
+				if (message.sender.id === user.id) return old;
 
 				const newValue = { ...old };
 				newValue[id]++;
@@ -106,7 +111,7 @@ export const useChat: (
 				content,
 				sender: {
 					name: senderName,
-					id: senderId,
+					id: user.id,
 				},
 			});
 		},
