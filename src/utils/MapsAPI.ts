@@ -52,4 +52,13 @@ export default class MapsAPI {
 		const r = await http.delete("/maps/" + map);
 		return r.data;
 	}
+
+	static async listUniverses(token: string) {
+		const r = await http.get("/universes", {
+			headers: {
+				Authorization: "Bearer " + token,
+			},
+		});
+		return r.data;
+	}
 }

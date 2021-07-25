@@ -1,6 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, HashRouter, Route, Switch } from "react-router-dom";
+import {
+	BrowserRouter,
+	HashRouter,
+	MemoryRouter,
+	Route,
+	Switch,
+} from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import "./index.css";
 import HomePage from "./pages/HomePage";
@@ -9,26 +15,35 @@ import Room from "./pages/Room";
 import RoomChooser from "./pages/RoomChooser/index";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ProtectedRoute from "./components/ProtectedRoute";
+import UniverseRoute from "./components/UniverseRoute";
+import { UniverseChooser } from "./pages/UniverseChooser";
+import UniversePage from "./pages/Universe";
 
 ReactDOM.render(
 	<React.StrictMode>
 		<RecoilRoot>
-			<BrowserRouter>
+			<MemoryRouter>
 				<Switch>
 					<Route path="/" exact>
 						<HomePage />
 					</Route>
-					<ProtectedRoute path="/maps/upload">
+					<ProtectedRoute path="/universes" exact>
+						<UniverseChooser />
+					</ProtectedRoute>
+					<UniverseRoute path="/universe" exact>
+						<UniversePage />
+					</UniverseRoute>
+					<UniverseRoute path="/universe/maps/upload">
 						<MapUploader />
-					</ProtectedRoute>
-					<ProtectedRoute path="/rooms/:roomId">
+					</UniverseRoute>
+					<UniverseRoute path="/universe/rooms/play">
 						<Room />
-					</ProtectedRoute>
-					<ProtectedRoute path="/rooms">
+					</UniverseRoute>
+					<UniverseRoute path="/universe/rooms">
 						<RoomChooser />
-					</ProtectedRoute>
+					</UniverseRoute>
 				</Switch>
-			</BrowserRouter>
+			</MemoryRouter>
 		</RecoilRoot>
 	</React.StrictMode>,
 	document.getElementById("root"),

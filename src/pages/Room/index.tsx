@@ -8,7 +8,11 @@ import TokenSpawner from "../../components/MapRenderer/AdminTools/TokenSpawner";
 import { useRoom, UseRoom } from "../../hooks/useRoom";
 import "./Room.css";
 import { useRecoilValue, useRecoilState } from "recoil";
-import { characterName, chatUnreadsState } from "../../utils/state";
+import {
+	characterName,
+	chatUnreadsState,
+	currentUniverseState,
+} from "../../utils/state";
 import RoomUsers from "../../components/RoomUsers/index";
 import Notifications from "../../components/Notifications/index";
 
@@ -45,7 +49,8 @@ export const CurrentRoomCtx = createContext<UseRoom>({
 });
 
 function App() {
-	const { roomId } = useParams<{ roomId: string }>();
+	const universe = useRecoilValue(currentUniverseState);
+	const roomId = universe.id;
 	const room = useRoom(roomId, useRecoilValue(characterName) || "");
 	const [unreadMessages, setUnreadMessages] = useRecoilState(
 		chatUnreadsState,

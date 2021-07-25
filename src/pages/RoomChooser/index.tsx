@@ -8,12 +8,11 @@ import {
 	Row,
 } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { characterName } from "../../utils/state";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { characterName, currentUniverseState } from "../../utils/state";
 
 export default function RoomChooser() {
-	const rooms = ["jdr"];
-	const [room, setRoom] = useState(rooms[0]);
+	const currentUniverse = useRecoilValue(currentUniverseState);
 	const [name, setName] = useRecoilState(characterName);
 
 	useEffect(() => {
@@ -34,25 +33,10 @@ export default function RoomChooser() {
 
 								localStorage.setItem("character-name", name);
 								e.preventDefault();
-								history.push("/rooms/" + room);
+								history.push("/universe/rooms/play");
 							}}
 						>
 							<InputGroup className="mb-3">
-								<InputGroup.Prepend>
-									<Form.Control
-										as="select"
-										value={room}
-										onChange={(e) => {
-											setRoom(e.target.value);
-										}}
-									>
-										{rooms.map((e) => (
-											<option key={e} value={e}>
-												{e}
-											</option>
-										))}
-									</Form.Control>
-								</InputGroup.Prepend>
 								<Col sm={4}>
 									<FormControl
 										placeholder="Character name"

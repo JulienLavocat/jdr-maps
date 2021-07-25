@@ -28,6 +28,23 @@ export const isAuthenticatedState = atom<boolean>({
 	default: false,
 });
 
+export const currentUniverseState = atom<Universe>({
+	key: "currentUniverse",
+	default: {
+		gm: [],
+		id: "",
+		maps: [],
+		name: "",
+		ownerId: "",
+		players: [],
+	},
+});
+
+export const hasCurrentUniverseState = atom<boolean>({
+	key: "hasCurrentUniverse",
+	default: false,
+});
+
 export type UserState = {
 	token: string;
 	user: {
@@ -52,3 +69,20 @@ export const userState = atom<UserState>({
 		},
 	},
 });
+
+export interface Map {
+	id: string;
+	width: number;
+	height: number;
+	name: string;
+	universe: string;
+}
+
+export interface Universe {
+	id: string;
+	ownerId: string;
+	name: string;
+	gm: string[];
+	players: string[];
+	maps: Map[];
+}

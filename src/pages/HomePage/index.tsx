@@ -1,8 +1,9 @@
 import { string } from "prop-types";
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { isAuthenticatedState, UserState, userState } from "../../utils/state";
+import { UniverseChooser } from "../UniverseChooser";
 
 const pages = [
 	{
@@ -23,6 +24,7 @@ export default function HomePage() {
 	const [user, setUser] = useRecoilState<UserState>(userState);
 	const [authError, setAuthError] = useState<any>(null);
 	const setIsAuthenticated = useSetRecoilState(isAuthenticatedState);
+	const history = useHistory();
 
 	useEffect(() => {
 		if (
@@ -30,7 +32,10 @@ export default function HomePage() {
 			localStorage.getItem("auth.user") &&
 			localStorage.getItem("auth.token")
 		) {
-			console.log("Got cache !");
+			console.log("Got cache !", {
+				user: JSON.parse(localStorage.getItem("auth.user") || ""),
+				token: localStorage.getItem("auth.token") || "",
+			});
 			setUser({
 				user: JSON.parse(localStorage.getItem("auth.user") || ""),
 				token: localStorage.getItem("auth.token") || "",
@@ -68,7 +73,7 @@ export default function HomePage() {
 				});
 		}
 		return () => {};
-	}, [code]);
+	}, [code, isAuthenticated]);
 
 	return (
 		<div>
@@ -77,16 +82,7 @@ export default function HomePage() {
 			) : authError ? (
 				<p>Une erreur s'est produite !</p>
 			) : (
-				<>
-					<ul>
-						{pages.map((e) => (
-							<li key={e.name}>
-								<Link to={e.path}>{e.name}</Link>
-							</li>
-						))}
-					</ul>
-					<p>{JSON.stringify(user)}</p>
-				</>
+				<>{history.push("/universes")}</>
 			)}
 		</div>
 	);
