@@ -15,10 +15,13 @@ import {
 	ListGroupItem,
 	ProgressBar,
 	Row,
+	Spinner,
 } from "react-bootstrap";
 import { FaTrashAlt } from "react-icons/fa";
 
 import "./mapUploader.css";
+import { useRecoilValue } from "recoil";
+import { currentUniverseState } from "../../utils/state";
 
 export default function MapUploader() {
 	return (
@@ -29,6 +32,7 @@ export default function MapUploader() {
 }
 
 function UploadFiles() {
+	const universe = useRecoilValue(currentUniverseState);
 	const [currentFile, setCurrentFile] = useState<File | null>(null);
 	const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
 	const [progress, setProgress] = useState(0);
@@ -38,7 +42,9 @@ function UploadFiles() {
 	const [mapName, setMapName] = useState("");
 
 	useEffect(() => {
-		MapsAPI.getMaps().then((r) => {
+		MapsAPI.getMaps(universe.id).then((r) => {
+			console.log(r);
+
 			setFileInfos(r);
 		});
 		return () => {};
@@ -54,7 +60,7 @@ function UploadFiles() {
 			const res = await MapsAPI.uploadMap(
 				currentFile,
 				mapName,
-				"jdr",
+				universe.id,
 				(progress) =>
 					setProgress(
 						Math.round((100 * progress.loaded) / progress.total),
@@ -134,15 +140,16 @@ function UploadFiles() {
 				{fileInfos ? (
 					<ListGroup variant="flush">
 						{fileInfos.map((file) => (
-							<ListGroupItem key={file.key}>
+							<ListGroupItem key={file.id}>
 								<a href={file.url} className="no-decorations">
-									{file.metadata.name}
+									{file.name}
 								</a>
 								&nbsp; &nbsp;
 								<FaTrashAlt
 									onClick={async () => {
 										const maps = await MapsAPI.deleteMap(
-											file.key,
+											universe.id,
+											file.id,
 										);
 
 										setFileInfos(maps);
@@ -152,9 +159,7 @@ function UploadFiles() {
 						))}
 					</ListGroup>
 				) : (
-					<div className="spinner-border" role="status">
-						<span className="sr-only">Loading...</span>
-					</div>
+					<Spinner animation="border" />
 				)}
 			</Card>
 		</Container>

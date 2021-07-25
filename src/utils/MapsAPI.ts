@@ -20,8 +20,8 @@ export interface MapData {
 }
 
 export default class MapsAPI {
-	static async getMaps(): Promise<MapData[]> {
-		return fetch(API + "/maps").then((r) => r.json());
+	static async getMaps(universeId: string): Promise<MapData[]> {
+		return fetch(`${API}/maps/${universeId}`).then((r) => r.json());
 	}
 
 	static getMapUrl(map: string) {
@@ -48,8 +48,11 @@ export default class MapsAPI {
 		return r.data;
 	}
 
-	static async deleteMap(map: string): Promise<MapData[]> {
-		const r = await http.delete("/maps/" + map);
+	static async deleteMap(
+		universeId: string,
+		map: string,
+	): Promise<MapData[]> {
+		const r = await http.delete(`/maps/${universeId}/${map}`);
 		return r.data;
 	}
 

@@ -8,17 +8,20 @@ import {
 	Table,
 } from "react-bootstrap";
 import { FaCheck, FaTrashAlt } from "react-icons/fa";
+import { useRecoilValue } from "recoil";
 import { CurrentRoomCtx } from "../../../pages/Room/index";
 import MapsAPI, { MapData } from "../../../utils/MapsAPI";
+import { currentUniverseState } from "../../../utils/state";
 
 export default function MapSelector() {
+	const universe = useRecoilValue(currentUniverseState);
 	const { maps, currentMap, setMaps, setCurrentMap } = useContext(
 		CurrentRoomCtx,
 	);
 	const [availableMaps, setAvailableMaps] = useState<MapData[] | null>(null);
 	const [selectedMap, setSelectedMap] = useState<number>(0);
 	useEffect(() => {
-		MapsAPI.getMaps()
+		MapsAPI.getMaps(universe.id)
 			.then((res) => {
 				setAvailableMaps(res);
 			})
