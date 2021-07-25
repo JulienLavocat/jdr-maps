@@ -52,8 +52,8 @@ export default function MapSelector() {
 								required
 							>
 								{availableMaps.map((e, index) => (
-									<option key={e.url} value={index}>
-										{e.metadata.name}
+									<option key={e.id} value={index}>
+										{e.name}
 									</option>
 								))}
 							</Form.Control>
@@ -69,7 +69,7 @@ export default function MapSelector() {
 			<Row className="mt-3">
 				<h5>Current level</h5>
 				<p>
-					{maps[currentMap]?.metadata.name} ({currentMap})
+					{maps[currentMap]?.name} ({currentMap})
 				</p>
 			</Row>
 			<Row className="mt-3">
@@ -89,7 +89,7 @@ export default function MapSelector() {
 							{maps.map((e, index) => (
 								<tr key={e.id}>
 									<td>{index + 1}</td>
-									<td>{e.metadata.name}</td>
+									<td>{e.name}</td>
 									<td>{e.id}</td>
 									<td>
 										<FaCheck

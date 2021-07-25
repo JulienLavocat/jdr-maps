@@ -80,24 +80,22 @@ export default function MapRenderer() {
 				<LayersControl position="bottomright">
 					{maps.map((e, index) => {
 						const isChecked = index === currentMap;
+						console.log(e);
 
 						return e ? (
 							<LayersControl.BaseLayer
-								key={e.key}
+								key={e.id}
 								checked={isChecked}
-								name={e.metadata.name}
+								name={e.name}
 							>
 								<ImageOverlay
 									bounds={
 										new LatLngBounds(
 											[0, 0],
-											[
-												e.metadata.height / 10,
-												e.metadata.width / 10,
-											],
+											[e.height / 10, e.width / 10],
 										)
 									}
-									url={MapsAPI.getMapUrl(e.key)}
+									url={MapsAPI.getMapUrl(e.id)}
 								/>
 							</LayersControl.BaseLayer>
 						) : null;

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Universe } from "./state";
 
 const API = import.meta.env.SNOWPACK_PUBLIC_API_URL;
 const S3: string = import.meta.env.SNOWPACK_PUBLIC_S3_URL;
@@ -11,12 +12,11 @@ const http = axios.create({
 });
 
 export interface MapData {
-	name: string;
-	date: string;
-	url: string;
 	id: string;
-	key: string;
-	metadata: any;
+	width: number;
+	height: number;
+	name: string;
+	universe: string;
 }
 
 export default class MapsAPI {
@@ -33,7 +33,7 @@ export default class MapsAPI {
 		name: string,
 		universe: string,
 		onUploadProgress: (progressEvent: any) => void,
-	): Promise<{ success: boolean; message: string; maps: MapData[] }> {
+	): Promise<{ success: boolean; message: string; universe: Universe }> {
 		const formData = new FormData();
 		formData.append("name", name);
 		formData.append("universe", universe);

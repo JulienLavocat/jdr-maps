@@ -2,6 +2,7 @@ import { nanoid } from "nanoid";
 import { string } from "prop-types";
 import { atom, RecoilState } from "recoil";
 import { IAP } from "../components/Notifications/index";
+import { MapData } from "./MapsAPI";
 
 export const characterName = atom<string | null>({
 	key: "character-name-state",
@@ -70,19 +71,11 @@ export const userState = atom<UserState>({
 	},
 });
 
-export interface Map {
-	id: string;
-	width: number;
-	height: number;
-	name: string;
-	universe: string;
-}
-
 export interface Universe {
 	id: string;
 	ownerId: string;
 	name: string;
 	gm: string[];
 	players: string[];
-	maps: Map[];
+	maps: MapData[];
 }

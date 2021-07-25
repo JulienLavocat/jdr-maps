@@ -68,7 +68,7 @@ function UploadFiles() {
 			);
 
 			setMessage(res.message);
-			setFileInfos(res.maps);
+			setFileInfos(res.universe.maps);
 		} catch (error) {
 			setMessage("Could not upload the file ! " + error.message);
 		}
@@ -141,7 +141,12 @@ function UploadFiles() {
 					<ListGroup variant="flush">
 						{fileInfos.map((file) => (
 							<ListGroupItem key={file.id}>
-								<a href={file.url} className="no-decorations">
+								<a
+									href={`${
+										import.meta.env.SNOWPACK_PUBLIC_S3_URL
+									}/${file.id}`}
+									className="no-decorations"
+								>
 									{file.name}
 								</a>
 								&nbsp; &nbsp;
