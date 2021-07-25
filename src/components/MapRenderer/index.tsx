@@ -45,7 +45,7 @@ export default function MapRenderer() {
 	};
 
 	return (
-		<div>
+		<div style={{ height: "100%" }}>
 			<MapContainer
 				center={[500, 500]}
 				zoom={0}

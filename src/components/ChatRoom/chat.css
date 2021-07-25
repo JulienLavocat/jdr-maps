@@ -1,4 +1,8 @@
 .chat {
-	height: 75vh;
+	height: 100%;
 	margin-bottom: 60px;
+}
+
+.max-height {
+	height: 100%;
 }

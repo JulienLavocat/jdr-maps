@@ -76,7 +76,7 @@ export default function HomePage() {
 	}, [code, isAuthenticated]);
 
 	return (
-		<div>
+		<div style={{ height: "100%" }}>
 			{isLoading ? (
 				<p>Loading...</p>
 			) : authError ? (
