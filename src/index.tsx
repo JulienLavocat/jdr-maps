@@ -22,7 +22,7 @@ import UniversePage from "./pages/Universe";
 ReactDOM.render(
 	<React.StrictMode>
 		<RecoilRoot>
-			<MemoryRouter>
+			<BrowserRouter>
 				<Switch>
 					<Route path="/" exact>
 						<HomePage />
@@ -43,7 +43,7 @@ ReactDOM.render(
 						<RoomChooser />
 					</UniverseRoute>
 				</Switch>
-			</MemoryRouter>
+			</BrowserRouter>
 		</RecoilRoot>
 	</React.StrictMode>,
 	document.getElementById("root"),
