@@ -56,9 +56,10 @@ function App() {
 		chatUnreadsState,
 	);
 	return (
-		<div>
+		<div style={{ height: "100%" }}>
 			<CurrentRoomCtx.Provider value={room}>
 				<Tabs
+					id="tabsBar"
 					defaultActiveKey="map"
 					onSelect={(key) => {
 						if (key?.startsWith("chat_")) {

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Card, CardColumns, Col, Row } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import MapsAPI from "../../utils/MapsAPI";
@@ -39,14 +39,28 @@ export function UniverseChooser() {
 	return (
 		<>
 			<p>Universe chooser</p>
-			{universes.map((e) => (
-				<Button
-					onClick={() => onCurrentUniverse(e)}
-					variant="secondary"
-				>
-					{e.name}
-				</Button>
-			))}
+			{/* <Row xs={1} md={1} className="g-4 mx-5">
+				{universes.map((e) => (
+					<Col>
+						<Card onClick={() => onCurrentUniverse(e)}>
+							<Card.Body>
+								<Card.Title>{e.name}</Card.Title>
+								<Card.Text>{""}</Card.Text>
+							</Card.Body>
+						</Card>
+					</Col>
+				))}
+			</Row> */}
+			<CardColumns className="px-5 mx-5">
+				{universes.map((e) => (
+					<Card onClick={() => onCurrentUniverse(e)} className="my-2">
+						<Card.Body>
+							<Card.Title>{e.name}</Card.Title>
+							<Card.Text>{""}</Card.Text>
+						</Card.Body>
+					</Card>
+				))}
+			</CardColumns>
 		</>
 	);
 }
