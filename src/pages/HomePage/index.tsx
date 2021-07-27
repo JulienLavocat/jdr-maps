@@ -52,6 +52,7 @@ export default function HomePage() {
 
 			window.location.href =
 				import.meta.env.SNOWPACK_PUBLIC_API_URL + "/auth/login";
+			return;
 		}
 
 		if (!isAuthenticated) {
