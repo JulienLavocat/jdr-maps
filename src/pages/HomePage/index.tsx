@@ -27,6 +27,8 @@ export default function HomePage() {
 	const history = useHistory();
 
 	useEffect(() => {
+		console.log(isAuthenticated, code, isLoading, user);
+
 		if (
 			!isAuthenticated &&
 			localStorage.getItem("auth.user") &&
@@ -46,11 +48,15 @@ export default function HomePage() {
 		}
 
 		if (!isAuthenticated && !code) {
+			console.log("No code received");
+
 			window.location.href =
 				import.meta.env.SNOWPACK_PUBLIC_API_URL + "/auth/login";
 		}
 
 		if (!isAuthenticated) {
+			console.log("Require authentication");
+
 			setIsLoading(true);
 			fetch(
 				import.meta.env.SNOWPACK_PUBLIC_API_URL +
